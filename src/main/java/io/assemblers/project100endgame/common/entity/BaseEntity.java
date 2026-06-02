@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.common.domain;
+package io.assemblers.project100endgame.common.entity;
 
 import java.time.LocalDateTime;
 

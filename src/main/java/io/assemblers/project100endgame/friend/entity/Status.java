@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.friend.domain;
+package io.assemblers.project100endgame.friend.entity;
 
 public enum Status {
 	PENDING,

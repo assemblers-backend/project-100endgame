@@ -1,8 +1,8 @@
-package io.assemblers.project100endgame.user.domain;
+package io.assemblers.project100endgame.user.entity;
 
 import java.time.LocalDateTime;
 
-import io.assemblers.project100endgame.common.domain.BaseEntity;
+import io.assemblers.project100endgame.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Users extends BaseEntity {
+public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -37,7 +37,7 @@ public class Users extends BaseEntity {
 
 	@Setter
 	@Column(nullable = false)
-	private String status;
+	private String status = "ACTIVE";
 
 	@Column(nullable = false)
 	private String provider;
@@ -49,7 +49,7 @@ public class Users extends BaseEntity {
 	private LocalDateTime lastLoginInAt = null;
 
 	@Builder
-	public Users(String nickname, String password, String email, String provider) {
+	public User(String nickname, String password, String email, String provider) {
 		this.nickname = nickname;
 		this.password = password;
 		this.email = email;

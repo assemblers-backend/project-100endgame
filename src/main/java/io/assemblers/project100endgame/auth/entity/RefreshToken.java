@@ -1,6 +1,8 @@
-package io.assemblers.project100endgame.wallet.domain;
+package io.assemblers.project100endgame.auth.entity;
 
-import io.assemblers.project100endgame.common.domain.BaseEntity;
+import java.time.LocalDateTime;
+
+import io.assemblers.project100endgame.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,22 +16,24 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Wallets extends BaseEntity {
+public class RefreshToken extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
 	@Column(unique = true, nullable = false)
-	String userId;
+	Long userId;
 
-	@Column(nullable = false)
-	Long gold = 3000L;
+	@Column(unique = true, nullable = false)
+	String token;
 
-	@Column(nullable = false)
-	Long gem = 0L;
+	LocalDateTime expiredAt;
 
 	@Builder
-	public Wallets(String userId) {
+	public RefreshToken(Long userId, String token) {
 		this.userId = userId;
+		this.token = token;
+
+		this.expiredAt = LocalDateTime.now().plusDays(14);
 	}
 }

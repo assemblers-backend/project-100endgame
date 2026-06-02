@@ -1,10 +1,8 @@
-package io.assemblers.project100endgame.friend.domain;
+package io.assemblers.project100endgame.profile.entity;
 
-import io.assemblers.project100endgame.common.domain.BaseEntity;
+import io.assemblers.project100endgame.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,24 +14,26 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Friends extends BaseEntity {
+public class UserProfile extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(nullable = false)
-	Long fromUserId;
+	@Column(unique = true, nullable = false)
+	Long userId;
 
 	@Column(nullable = false)
-	Long toUserId;
+	Long level = 1L;
 
-	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	Status status = Status.PENDING;
+	Long exp = 0L;
+
+	@Column(nullable = false)
+	Long totalPlaySeconds = 0L;
 
 	@Builder
-	public Friends(Long fromUserId, Long toUserId) {
-		this.fromUserId = fromUserId;
-		this.toUserId = toUserId;
+	public UserProfile(Long userId) {
+		this.userId = userId;
 	}
+
 }
