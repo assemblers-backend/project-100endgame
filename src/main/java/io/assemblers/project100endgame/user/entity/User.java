@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import lombok.Setter;
 
 @Getter
 @Entity
+@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 	@Id
@@ -46,7 +48,7 @@ public class User extends BaseEntity {
 	private String profileImageUrl = null;
 
 	@Setter
-	private LocalDateTime lastLoginInAt = null;
+	private LocalDateTime lastLogInAt = null;
 
 	@Builder
 	public User(String nickname, String password, String email, String provider) {
