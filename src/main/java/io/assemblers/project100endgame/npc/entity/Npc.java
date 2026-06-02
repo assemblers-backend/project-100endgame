@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.npc.domain;
+package io.assemblers.project100endgame.npc.entity;
 
 import io.assemblers.project100endgame.common.entity.BaseEntity;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.inventory.Entity;
+package io.assemblers.project100endgame.inventory.entity;
 
 import io.assemblers.project100endgame.common.entity.BaseEntity;
 import io.assemblers.project100endgame.item.entity.Item;
