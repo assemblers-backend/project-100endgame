@@ -19,7 +19,7 @@ public class UserProfiles extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	Long userId;
 
 	@Column(nullable = false)

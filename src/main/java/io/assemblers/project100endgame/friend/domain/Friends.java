@@ -3,6 +3,8 @@ package io.assemblers.project100endgame.friend.domain;
 import io.assemblers.project100endgame.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +27,7 @@ public class Friends extends BaseEntity {
 	@Column(nullable = false)
 	Long toUserId;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	Status status = Status.PENDING;
 
