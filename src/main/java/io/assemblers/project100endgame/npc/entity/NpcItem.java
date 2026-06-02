@@ -4,6 +4,7 @@ import io.assemblers.project100endgame.common.entity.BaseEntity;
 import io.assemblers.project100endgame.item.entity.Item;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,7 +32,8 @@ public class NpcItem extends BaseEntity {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    public static NpcItem npcItem(
+    @Builder
+    public NpcItem(
             Long quantity,
             Long sortOrder,
             Npc npc,
@@ -43,16 +45,11 @@ public class NpcItem extends BaseEntity {
         validateNpc(npc);
         validateItem(item);
 
+        this.quantity = quantity;
+        this.sortOrder = sortOrder;
+        this.npc = npc;
+        this.item = item;
 
-        // 생성
-        NpcItem npcItem = new NpcItem();
-
-        npcItem.quantity = quantity;
-        npcItem.sortOrder = sortOrder;
-        npcItem.npc = npc;
-        npcItem.item = item;
-
-        return npcItem;
     }
 
     public void updateQuantity(Long quantity){

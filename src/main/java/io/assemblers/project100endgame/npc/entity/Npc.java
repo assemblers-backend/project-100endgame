@@ -3,12 +3,13 @@ package io.assemblers.project100endgame.npc.entity;
 import io.assemblers.project100endgame.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name="npcs")
+@Table(name = "npcs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Npc extends BaseEntity {
 
@@ -31,7 +32,8 @@ public class Npc extends BaseEntity {
     @Column(nullable = false)
     private boolean active;
 
-    public static Npc create(
+    @Builder
+    public Npc(
             String rId,
             String name,
             String description,
@@ -41,15 +43,12 @@ public class Npc extends BaseEntity {
         validateRId(rId);
         validateInfo(name,description,locationKey);
 
-        Npc npc = new Npc();
+        this.rId = rId;
+        this.name = name;
+        this.description = description;
+        this.locationKey = locationKey;
+        this.active = true;
 
-        npc.rId = rId;
-        npc.name = name;
-        npc.description = description;
-        npc.locationKey = locationKey;
-        npc.active = true;
-
-        return npc;
     }
 
     public void update(

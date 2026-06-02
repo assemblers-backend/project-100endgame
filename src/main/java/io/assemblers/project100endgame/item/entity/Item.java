@@ -5,6 +5,7 @@ import io.assemblers.project100endgame.item.constant.ItemGrade;
 import io.assemblers.project100endgame.item.constant.ItemType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,8 +42,8 @@ public class Item extends BaseEntity {
     @Column(nullable = false)
     private Long sellPrice;
 
-
-    public static Item create(
+    @Builder
+    public Item(
             String rId,
             String itemName,
             ItemType itemType,
@@ -56,16 +57,14 @@ public class Item extends BaseEntity {
         validateInfo(itemName, itemType, itemGrade, description);
         validatePrice(price, sellPrice);
 
-        Item item = new Item();
-        item.rId = rId;
-        item.itemName = itemName;
-        item.itemType = itemType;
-        item.itemGrade = itemGrade;
-        item.description = description;
-        item.price = price;
-        item.sellPrice = sellPrice;
+        this.rId = rId;
+        this.itemName = itemName;
+        this.itemType = itemType;
+        this.itemGrade = itemGrade;
+        this.description = description;
+        this.price = price;
+        this.sellPrice = sellPrice;
 
-        return item;
     }
 
 

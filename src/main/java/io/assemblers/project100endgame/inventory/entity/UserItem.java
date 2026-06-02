@@ -5,6 +5,7 @@ import io.assemblers.project100endgame.item.entity.Item;
 import io.assemblers.project100endgame.user.domain.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,7 +38,8 @@ public class UserItem extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    public static UserItem create(
+    @Builder
+    public UserItem(
             Users user,
             Item item,
             Long quantity
@@ -46,15 +48,12 @@ public class UserItem extends BaseEntity {
         validateItem(item);
         validateQuantity(quantity);
 
-        UserItem userItem = new UserItem();
+        this.user = user;
+        this.item = item;
+        this.quantity = quantity;
+        this.equipped = false;
+        this.acquiredAt = LocalDateTime.now();
 
-        userItem.user = user;
-        userItem.item = item;
-        userItem.quantity = quantity;
-        userItem.equipped = false;
-        userItem.acquiredAt = LocalDateTime.now();
-
-        return userItem;
     }
 
     public void increaseQuantity(Long quantity) {
