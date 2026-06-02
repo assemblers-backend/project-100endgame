@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -40,7 +40,7 @@ public class Member {
 	private LocalDateTime lastLoginInAt = null;
 
 	@Builder
-	public Member(String username, String password, String email, String provider) {
+	public Users(String username, String password, String email, String provider) {
 		this.nickname = username;
 		this.password = password;
 		this.email = email;
