@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,16 +29,22 @@ public class RefreshToken extends BaseEntity {
 	@JoinColumn(nullable = false)
 	Users user;
 
-	@Column(unique = true, nullable = false)
+	@Column(unique = true, nullable = false, length = 255)
 	String token;
 
+	@Column(nullable = false)
 	LocalDateTime expiredAt;
 
 	@Builder
 	public RefreshToken(Users user, String token) {
 		this.user = user;
 		this.token = token;
+	}
 
-		this.expiredAt = LocalDateTime.now().plusDays(14);
+	@PrePersist
+	protected void onCreate() {
+		if (this.expiredAt == null) {
+			this.expiredAt = LocalDateTime.now().plusDays(14);
+		}
 	}
 }
