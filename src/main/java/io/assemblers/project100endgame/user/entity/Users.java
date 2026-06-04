@@ -2,6 +2,8 @@ package io.assemblers.project100endgame.user.entity;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import io.assemblers.project100endgame.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,5 +1,7 @@
 package io.assemblers.project100endgame.friend.entity;
 
+import java.util.Objects;
+
 import io.assemblers.project100endgame.common.entity.BaseEntity;
 import io.assemblers.project100endgame.user.entity.Users;
 import jakarta.persistence.Column;
@@ -38,7 +40,12 @@ public class Friend extends BaseEntity {
 
 	@Builder
 	public Friend(Users fromUser, Users toUser) {
-		this.fromUser = fromUser;
-		this.toUser = toUser;
+		this.fromUser = Objects.requireNonNull(fromUser, "fromUser는 NULL이 될 수 없습니다.");
+		this.toUser = Objects.requireNonNull(toUser, "toUser는 NULL이 될 수 없습니다.");
+
+		if (this.fromUser == this.toUser
+			|| (this.fromUser.getId() != null && this.fromUser.getId().equals(this.toUser.getId()))) {
+			throw new IllegalArgumentException("자기 자신을 친구로 추가할 수 없습니다.");
+		}
 	}
 }

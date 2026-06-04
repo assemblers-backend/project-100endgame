@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Wallets extends BaseEntity {
+public class Wallet extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
@@ -33,7 +33,7 @@ public class Wallets extends BaseEntity {
 	Long gem = 0L;
 
 	@Builder
-	public Wallets(Users user) {
+	public Wallet(Users user) {
 		this.user = user;
 	}
 }
