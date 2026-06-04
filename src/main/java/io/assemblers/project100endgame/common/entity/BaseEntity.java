@@ -1,35 +1,37 @@
 package io.assemblers.project100endgame.common.entity;
 
-import java.time.LocalDateTime;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
-	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	protected LocalDateTime createdAt;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    protected LocalDateTime createdAt;
 
-	@LastModifiedDate
-	@Column(nullable = false)
-	protected LocalDateTime updatedAt;
+    @LastModifiedDate
+    @Column(nullable = false)
+    protected LocalDateTime updatedAt;
 
-	protected LocalDateTime deletedAt;
-	public void delete() {
-		this.deletedAt = LocalDateTime.now();
-	}
+    protected LocalDateTime deletedAt;
+    public void delete(){
+        this.deletedAt = LocalDateTime.now();
 
-	public boolean isDeleted() {
-		return deletedAt != null;
-	}
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
+    }
+
 }
