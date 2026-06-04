@@ -31,12 +31,12 @@ public class SecurityConfig {
 				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 
 				// 인증
-				.requestMatchers("/api/v1/auth/login").permitAll()
+				.requestMatchers(HttpMethod.POST,"/api/v1/auth/login").anonymous()
 				.requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
 				.requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").authenticated()
 
 				// 유저
-				.requestMatchers(HttpMethod.POST, "/api/v1/users/register").permitAll()
+				.requestMatchers(HttpMethod.POST, "/api/v1/users/register").anonymous()
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me").authenticated()
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/data").authenticated()
 
