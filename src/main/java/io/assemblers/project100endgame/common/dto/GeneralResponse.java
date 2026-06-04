@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.common.health.dto;
+package io.assemblers.project100endgame.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
