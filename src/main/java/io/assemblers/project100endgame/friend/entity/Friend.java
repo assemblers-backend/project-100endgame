@@ -25,11 +25,11 @@ public class Friend extends BaseEntity {
 	Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "from_user_id", nullable = false)
 	Users fromUser;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "to_user_id", nullable = false)
 	Users toUser;
 
 	@Enumerated(EnumType.STRING)
