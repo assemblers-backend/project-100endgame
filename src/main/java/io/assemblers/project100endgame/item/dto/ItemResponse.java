@@ -1,32 +1,27 @@
 package io.assemblers.project100endgame.item.dto;
 
 import io.assemblers.project100endgame.item.entity.Item;
-import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-@Builder
-public class ItemResponse {
-
-	private Long itemId;
-	private String rId;
-	private String itemName;
-	private String itemType;
-	private String itemGrade;
-	private String description;
-	private Long price;
-	private Long sellPrice;
-
+public record ItemResponse(
+	Long itemId,
+	String rId,
+	String itemName,
+	String itemType,
+	String itemGrade,
+	String description,
+	Long price,
+	Long sellPrice
+) {
 	public static ItemResponse from(Item item) {
-		return ItemResponse.builder()
-			.itemId(item.getId())
-			.rId(item.getRId())
-			.itemName(item.getItemName())
-			.itemType(item.getItemType().name())
-			.itemGrade(item.getItemGrade().name())
-			.description(item.getDescription())
-			.price(item.getPrice())
-			.sellPrice(item.getSellPrice())
-			.build();
+		return new ItemResponse(
+			item.getId(),
+			item.getRId(),
+			item.getItemName(),
+			item.getItemType().name(),
+			item.getItemGrade().name(),
+			item.getDescription(),
+			item.getPrice(),
+			item.getSellPrice()
+		);
 	}
 }
