@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name="npc_shop_items")
+@Table(name="npc_shop_items",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"npc_id", "item_id"}))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NpcItem extends BaseEntity {
 

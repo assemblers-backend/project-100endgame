@@ -2,7 +2,7 @@ package io.assemblers.project100endgame.inventory.entity;
 
 import io.assemblers.project100endgame.common.entity.BaseEntity;
 import io.assemblers.project100endgame.item.entity.Item;
-import io.assemblers.project100endgame.user.domain.Users;
+import io.assemblers.project100endgame.user.entity.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
