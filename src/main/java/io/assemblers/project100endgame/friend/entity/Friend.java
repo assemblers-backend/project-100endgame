@@ -1,6 +1,7 @@
 package io.assemblers.project100endgame.friend.entity;
 
 import io.assemblers.project100endgame.common.entity.BaseEntity;
+import io.assemblers.project100endgame.user.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,19 +24,21 @@ public class Friend extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(nullable = false)
-	Long fromUserId;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	Users fromUser;
 
-	@Column(nullable = false)
-	Long toUserId;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	Users toUser;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	Status status = Status.PENDING;
 
 	@Builder
-	public Friend(Long fromUserId, Long toUserId) {
-		this.fromUserId = fromUserId;
-		this.toUserId = toUserId;
+	public Friend(Users fromUser, Users toUser) {
+		this.fromUser = fromUser;
+		this.toUser = toUser;
 	}
 }

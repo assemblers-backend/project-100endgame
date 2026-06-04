@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity {
+public class Users extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -51,7 +51,7 @@ public class User extends BaseEntity {
 	private LocalDateTime lastLogInAt = null;
 
 	@Builder
-	public User(String nickname, String password, String email, String provider) {
+	public Users(String nickname, String password, String email, String provider) {
 		this.nickname = nickname;
 		this.password = password;
 		this.email = email;

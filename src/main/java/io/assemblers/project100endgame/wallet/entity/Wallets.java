@@ -1,11 +1,14 @@
-package io.assemblers.project100endgame.wallet.domain;
+package io.assemblers.project100endgame.wallet.entity;
 
 import io.assemblers.project100endgame.common.entity.BaseEntity;
+import io.assemblers.project100endgame.user.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +22,9 @@ public class Wallets extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(unique = true, nullable = false)
-	String userId;
+	@OneToOne
+	@JoinColumn(name = "users", unique = true, nullable = false)
+	Users user;
 
 	@Column(nullable = false)
 	Long gold = 3000L;
@@ -29,7 +33,7 @@ public class Wallets extends BaseEntity {
 	Long gem = 0L;
 
 	@Builder
-	public Wallets(String userId) {
-		this.userId = userId;
+	public Wallets(Users user) {
+		this.user = user;
 	}
 }

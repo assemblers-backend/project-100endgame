@@ -1,11 +1,14 @@
 package io.assemblers.project100endgame.profile.entity;
 
 import io.assemblers.project100endgame.common.entity.BaseEntity;
+import io.assemblers.project100endgame.user.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +22,9 @@ public class UserProfile extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(unique = true, nullable = false)
-	Long userId;
+	@OneToOne
+	@JoinColumn(name = "users", unique = true, nullable = false)
+	Users user;
 
 	@Column(nullable = false)
 	Long level = 1L;
@@ -32,8 +36,8 @@ public class UserProfile extends BaseEntity {
 	Long totalPlaySeconds = 0L;
 
 	@Builder
-	public UserProfile(Long userId) {
-		this.userId = userId;
+	public UserProfile(Users user) {
+		this.user = user;
 	}
 
 }

@@ -3,11 +3,14 @@ package io.assemblers.project100endgame.auth.entity;
 import java.time.LocalDateTime;
 
 import io.assemblers.project100endgame.common.entity.BaseEntity;
+import io.assemblers.project100endgame.user.entity.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +24,9 @@ public class RefreshToken extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(nullable = false)
-	Long userId;
+	@OneToOne
+	@JoinColumn(nullable = false)
+	Users user;
 
 	@Column(unique = true, nullable = false)
 	String token;
@@ -30,8 +34,8 @@ public class RefreshToken extends BaseEntity {
 	LocalDateTime expiredAt;
 
 	@Builder
-	public RefreshToken(Long userId, String token) {
-		this.userId = userId;
+	public RefreshToken(Users user, String token) {
+		this.user = user;
 		this.token = token;
 
 		this.expiredAt = LocalDateTime.now().plusDays(14);
