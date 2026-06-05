@@ -22,7 +22,7 @@ public class LogOutController {
 
 	@PostMapping
 	public ResponseEntity<GeneralResponse<Object>> logOut(HttpServletRequest request) {
-		String token = resolveToken(request);
+		String token = tokenService.resolveToken(request);
 
 		if (token == null) {
 			throw new LogOutFailedException("인증이 필요합니다.");
@@ -37,13 +37,5 @@ public class LogOutController {
 				.data(null)
 				.build()
 		);
-	}
-
-	private String resolveToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader("Authorization");
-		if ( bearerToken != null && bearerToken.startsWith("Bearer ") ) {
-			return bearerToken.substring(7);
-		}
-		return null;
 	}
 }

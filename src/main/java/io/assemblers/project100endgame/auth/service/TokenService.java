@@ -9,6 +9,7 @@ import io.assemblers.project100endgame.auth.entity.RefreshToken;
 import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.user.repository.UsersRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,5 +46,13 @@ public class TokenService {
 	@Transactional
 	public void logOut(String token) {
 		tokenRepository.removeByToken(token);
+	}
+
+	public String resolveToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+		if ( bearerToken != null && bearerToken.startsWith("Bearer ") ) {
+			return bearerToken.substring(7);
+		}
+		return null;
 	}
 }
