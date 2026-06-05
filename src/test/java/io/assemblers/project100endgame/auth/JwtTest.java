@@ -1,7 +1,5 @@
 package io.assemblers.project100endgame.auth;
 
-import javax.crypto.SecretKey;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -9,11 +9,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
-@RequiredArgsConstructor
 public class UsersDetails implements UserDetails {
 	private String username;
 	private String role;
