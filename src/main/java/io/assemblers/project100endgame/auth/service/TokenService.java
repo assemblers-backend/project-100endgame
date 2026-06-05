@@ -44,8 +44,8 @@ public class TokenService {
 	}
 
 	@Transactional
-	public void logOut(String token) {
-		tokenRepository.removeByToken(token);
+	public void logOut(Long id) {
+		tokenRepository.removeById(id);
 	}
 
 	public String resolveToken(HttpServletRequest request) {

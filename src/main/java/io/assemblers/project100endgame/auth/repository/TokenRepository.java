@@ -9,6 +9,5 @@ public interface TokenRepository extends JpaRepository<RefreshToken, Long> {
 	RefreshToken findByUserId(Long userId);
 
 	void deleteByUserId(Long userId);
-	void removeByToken(String token);
-
+	void removeById(Long id);
 }

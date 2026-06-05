@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.assemblers.project100endgame.auth.exception.LogOutFailedException;
+import io.assemblers.project100endgame.auth.service.TokenProvider;
 import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LogOutController {
 	private final TokenService tokenService;
+	private final TokenProvider tokenProvider;
 
 	@PostMapping
 	public ResponseEntity<GeneralResponse<Object>> logOut(HttpServletRequest request) {
@@ -28,7 +30,9 @@ public class LogOutController {
 			throw new LogOutFailedException("인증이 필요합니다.");
 		}
 
-		tokenService.logOut(token);
+		Long id = tokenProvider.parseId(token);
+
+		tokenService.logOut(id);
 
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.builder()
