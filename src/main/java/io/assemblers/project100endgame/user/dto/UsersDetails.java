@@ -23,7 +23,7 @@ public class UsersDetails implements UserDetails {
 
 	@Override
 	public @Nullable String getPassword() {
-		return "$2a$12$vdPuDSVXGu1zrZEz30LjGuCiIQ3P.ok2QWcbJGQfp.dSgWsPXfev.";
+		return null;
 	}
 
 	@Override
