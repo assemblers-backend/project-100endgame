@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.assemblers.project100endgame.auth.config.properties.JwtProperties;
 import io.assemblers.project100endgame.auth.dto.LogInRequest;
-import io.assemblers.project100endgame.auth.dto.LogInResponse;
+import io.assemblers.project100endgame.auth.dto.TokenResponse;
 import io.assemblers.project100endgame.auth.dto.TokenPair;
+import io.assemblers.project100endgame.auth.exception.LogInFailedException;
 import io.assemblers.project100endgame.auth.service.TokenProvider;
+import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.user.repository.UsersRepository;
@@ -28,36 +31,34 @@ public class LogInController {
 	private final UsersRepository repository;
 	private final TokenProvider tokenProvider;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtProperties jwtProperties;
+	private final TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity<GeneralResponse<LogInResponse>> login(
+	public ResponseEntity<GeneralResponse<TokenResponse>> login(
 		@RequestBody LogInRequest logInRequest) {
 
 		String email = logInRequest.email();
-		String password = passwordEncoder.encode(logInRequest.password());
+		String password = logInRequest.password();
 
 		Users user = repository.findByEmail(email);
 
-		if (user == null || !Objects.equals(user.getPassword(), password)) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-				.body(GeneralResponse.<LogInResponse>builder()
-					.success(true)
-					.message("이메일 또는 비밀번호가 올바르지 않습니다.")
-					.data(null)
-					.build()
-				);
+		if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+			throw new LogInFailedException("이메일 또는 비밀번호가 올바르지 않습니다.");
 		}
 
 		TokenPair tokenPair = tokenProvider.issueTokenPair(user.getId());
 
-		LogInResponse logInResponse = new LogInResponse(
+		tokenService.tokenRotator(user.getId(), tokenPair.refreshToken());
+
+		TokenResponse logInResponse = new TokenResponse(
 			tokenPair.accessToken(),
 			tokenPair.refreshToken(),
-			900L
+			jwtProperties.getValidations().getAccess() / 1000L
 		);
 
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(GeneralResponse.<LogInResponse>builder()
+			.body(GeneralResponse.<TokenResponse>builder()
 				.success(true)
 				.message("로그인되었습니다.")
 				.data(logInResponse)
