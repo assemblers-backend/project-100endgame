@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.assemblers.project100endgame.auth.entity.RefreshToken;
+import io.assemblers.project100endgame.auth.exception.UserNotFoundException;
 import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.user.repository.UsersRepository;
@@ -24,7 +25,7 @@ public class TokenService {
 	public void tokenRotator(Long userId, String newRefreshToken) {
 		Optional<Users> findUser = usersRepository.findById(userId);
 
-		Users user = findUser.orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+		Users user = findUser.orElseThrow(() -> new UserNotFoundException(userId));
 
 		RefreshToken refreshToken = tokenRepository.findByUserId(userId);
 
@@ -43,7 +44,7 @@ public class TokenService {
 
 	@Transactional
 	public void logOut(Long id) {
-		tokenRepository.removeById(id);
+		tokenRepository.deleteById(id);
 	}
 
 	public String resolveToken(HttpServletRequest request) {
