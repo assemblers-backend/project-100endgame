@@ -22,11 +22,9 @@ public class TokenService {
 
 	@Transactional
 	public void tokenRotator(Long userId, String newRefreshToken) {
-		Optional<Users> user = usersRepository.findById(userId);
+		Optional<Users> findUser = usersRepository.findById(userId);
 
-		if (user.isEmpty()) {
-			throw new RuntimeException("유저를 찾을 수 없습니다.");
-		}
+		Users user = findUser.orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
 
 		RefreshToken refreshToken = tokenRepository.findByUserId(userId);
 
@@ -37,7 +35,7 @@ public class TokenService {
 
 		tokenRepository.save(
 				new RefreshToken(
-				user.get(),
+				user,
 				newRefreshToken
 			)
 		);
