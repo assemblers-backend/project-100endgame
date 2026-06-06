@@ -13,7 +13,7 @@ public interface NpcRepository extends JpaRepository<Npc, Long> {
 	@Query("""
 		select distinct n
 		from Npc n
-		left join fetch n.npcItem ni
+		left join fetch n.npcItems ni
 		left join fetch ni.item
 		where n.active = true
 		order by n.id asc, ni.sortOrder asc
