@@ -30,6 +30,8 @@ public class LogOutController {
 			throw new LogOutFailedException("인증이 필요합니다.");
 		}
 
+		tokenService.accessTokenBlacklistValidate(token);
+
 		Long id = tokenProvider.parseId(token);
 
 		tokenService.logOut(id);
