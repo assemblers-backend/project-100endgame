@@ -38,9 +38,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
 		String token = tokenService.resolveToken(request);
 
-		if ( token != null && tokenProvider.validate(token) && tokenProvider.parseClaims(token).get("isAccess").equals("true")) {
+		if ( token != null && tokenProvider.validate(token) && tokenProvider.parseClaims(token).get("isAccess").toString().equals("true")) {
 			try {
-				Long tokenId = Long.valueOf(tokenProvider.parseClaims(token).get("id").toString());
+				Long tokenId = Long.valueOf(tokenProvider.parseClaims(token).getSubject());
 
 				UsersDetails usersDetails = usersService.loadUserById(tokenId);
 

@@ -50,9 +50,14 @@ public class TokenService {
 
 	@Transactional
 	public void logOut(Long id) {
-		String token = tokenRepository.findByUserId(id).getToken();
+		RefreshToken token = tokenRepository.findByUserId(id);
+
+		if (token == null) {
+			throw new UserNotFoundException(id);
+		}
+
 		tokenRepository.deleteById(id);
-		addTokenBlacklist(token);
+		addTokenBlacklist(token.getToken());
 	}
 
 	public String resolveToken(HttpServletRequest request) {

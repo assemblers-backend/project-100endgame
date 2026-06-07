@@ -37,7 +37,7 @@ public class LogOutController {
 			throw new LogOutFailedException("유효하지 않은 토큰입니다.");
 		}
 
-		Long id = Long.valueOf(tokenProvider.parseClaims(token).get("id").toString());
+		Long id = Long.valueOf(tokenProvider.parseClaims(token).getSubject());
 
 		tokenService.logOut(id);
 
