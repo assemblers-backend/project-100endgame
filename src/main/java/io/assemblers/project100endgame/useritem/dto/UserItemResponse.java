@@ -1,9 +1,9 @@
-package io.assemblers.project100endgame.inventory.dto;
+package io.assemblers.project100endgame.useritem.dto;
 
 import java.time.LocalDateTime;
 
-import io.assemblers.project100endgame.inventory.entity.UserItem;
 import io.assemblers.project100endgame.item.entity.Item;
+import io.assemblers.project100endgame.useritem.entity.UserItem;
 
 public record UserItemResponse(
 	Long userItemId,

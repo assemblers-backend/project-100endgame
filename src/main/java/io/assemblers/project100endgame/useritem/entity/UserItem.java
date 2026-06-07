@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.inventory.entity;
+package io.assemblers.project100endgame.useritem.entity;
 
 import java.time.LocalDateTime;
 

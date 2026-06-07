@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.inventory.repository;
+package io.assemblers.project100endgame.useritem.repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import io.assemblers.project100endgame.inventory.entity.UserItem;
+import io.assemblers.project100endgame.useritem.entity.UserItem;
 
 public interface UserItemRepository extends JpaRepository<UserItem, Long> {
 	/*
@@ -36,5 +36,5 @@ public interface UserItemRepository extends JpaRepository<UserItem, Long> {
 		@Param("userId") Long userId,
 		@Param("itemId") Long itemId
 	);
-	
+
 }

@@ -1,12 +1,12 @@
-package io.assemblers.project100endgame.inventory.service;
+package io.assemblers.project100endgame.useritem.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.assemblers.project100endgame.inventory.dto.UserItemResponse;
-import io.assemblers.project100endgame.inventory.repository.UserItemRepository;
+import io.assemblers.project100endgame.useritem.dto.UserItemResponse;
+import io.assemblers.project100endgame.useritem.repository.UserItemRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
