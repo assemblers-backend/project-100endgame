@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+	private final JwtFilter jwtFilter;
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 		return http
@@ -98,6 +100,8 @@ public class SecurityConfig {
 				.anyRequest()
 				.authenticated()
 			)
+
+			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
 			.build();
 	}

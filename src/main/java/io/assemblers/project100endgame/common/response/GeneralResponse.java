@@ -1,4 +1,4 @@
-package io.assemblers.project100endgame.common.dto;
+package io.assemblers.project100endgame.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

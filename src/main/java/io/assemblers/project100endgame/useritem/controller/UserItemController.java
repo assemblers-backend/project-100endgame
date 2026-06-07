@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.assemblers.project100endgame.common.dto.GeneralResponse;
+import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.useritem.dto.ItemPickupRequest;
 import io.assemblers.project100endgame.useritem.dto.UserItemResponse;
 import io.assemblers.project100endgame.useritem.service.UserItemService;

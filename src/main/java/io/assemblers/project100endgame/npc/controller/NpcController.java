@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.assemblers.project100endgame.common.dto.GeneralResponse;
+import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.common.response.ApiResponse;
 import io.assemblers.project100endgame.npc.dto.NpcResponse;
 import io.assemblers.project100endgame.npc.service.NpcService;
