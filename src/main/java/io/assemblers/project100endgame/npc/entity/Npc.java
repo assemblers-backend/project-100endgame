@@ -1,7 +1,18 @@
 package io.assemblers.project100endgame.npc.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.assemblers.project100endgame.common.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,99 +24,103 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Npc extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "r_id", nullable = false, unique = true, length = 100)
-    private String rId;
+	@Column(name = "r_id", nullable = false, unique = true, length = 100)
+	private String rId;
 
-    @Column(nullable = false, length = 100)
-    private String name;
+	@Column(nullable = false, length = 100)
+	private String name;
 
-    @Column(length = 500)
-    private String description;
+	@Column(length = 500)
+	private String description;
 
-    @Column(nullable = false, length = 100)
-    private String locationKey;
+	@Column(nullable = false, length = 100)
+	private String locationKey;
 
-    @Column(nullable = false)
-    private boolean active;
+	@Column(nullable = false)
+	private boolean active;
 
-    @Builder
-    public Npc(
-            String rId,
-            String name,
-            String description,
-            String locationKey
-    ){
+	@OneToMany(mappedBy = "npc", fetch = FetchType.LAZY)
+	@OrderBy("sortOrder ASC")
+	private List<NpcItem> npcItems = new ArrayList<>();
 
-        validateRId(rId);
-        validateInfo(name,description,locationKey);
+	@Builder
+	public Npc(
+		String rId,
+		String name,
+		String description,
+		String locationKey
+	) {
 
-        this.rId = rId;
-        this.name = name;
-        this.description = description;
-        this.locationKey = locationKey;
-        this.active = true;
+		validateRId(rId);
+		validateInfo(name, description, locationKey);
 
-    }
+		this.rId = rId;
+		this.name = name;
+		this.description = description;
+		this.locationKey = locationKey;
+		this.active = true;
 
-    public void update(
-            String name,
-            String description,
-            String locationKey
-    ){
-        validateInfo(name,description,locationKey);
+	}
 
-        this.name = name;
-        this.description = description;
-        this.locationKey = locationKey;
-    }
+	public void update(
+		String name,
+		String description,
+		String locationKey
+	) {
+		validateInfo(name, description, locationKey);
 
-    public void activate(){
-        this.active = true;
-    }
+		this.name = name;
+		this.description = description;
+		this.locationKey = locationKey;
+	}
 
-    public void deactivate(){
-        this.active = false;
-    }
+	public void activate() {
+		this.active = true;
+	}
 
-    private static void validateRId(String rId) {
-        if (rId == null || rId.isBlank()) {
-            throw new IllegalArgumentException("NPC 리소스 ID는 필수입니다.");
-        }
+	public void deactivate() {
+		this.active = false;
+	}
 
-        if (rId.length() > 100) {
-            throw new IllegalArgumentException("NPC 리소스 ID는 100자를 초과할 수 없습니다.");
-        }
-    }
+	private static void validateRId(String rId) {
+		if (rId == null || rId.isBlank()) {
+			throw new IllegalArgumentException("NPC 리소스 ID는 필수입니다.");
+		}
 
-    private static void validateInfo(
-            String name,
-            String description,
-            String locationKey
-    ){
+		if (rId.length() > 100) {
+			throw new IllegalArgumentException("NPC 리소스 ID는 100자를 초과할 수 없습니다.");
+		}
+	}
 
-        if(name == null || name.isBlank()){
-            throw new IllegalArgumentException("NPC 이름은 필수입니다.");
-        }
+	private static void validateInfo(
+		String name,
+		String description,
+		String locationKey
+	) {
 
-        if (name.length() > 100) {
-            throw new IllegalArgumentException("NPC 이름은 100자를 초과할 수 없습니다.");
-        }
+		if (name == null || name.isBlank()) {
+			throw new IllegalArgumentException("NPC 이름은 필수입니다.");
+		}
 
-        if(description != null && description.length() >500){
-            throw new IllegalArgumentException("NPC 설명은 500자를 초과할 수 없습니다.");
-        }
+		if (name.length() > 100) {
+			throw new IllegalArgumentException("NPC 이름은 100자를 초과할 수 없습니다.");
+		}
 
-        if(locationKey == null || locationKey.isBlank()){
-            throw new IllegalArgumentException("NPC 위치 키는 필수입니다.");
-        }
+		if (description != null && description.length() > 500) {
+			throw new IllegalArgumentException("NPC 설명은 500자를 초과할 수 없습니다.");
+		}
 
-        if (locationKey.length() > 100) {
-            throw new IllegalArgumentException("NPC 위치 키는 100자를 초과할 수 없습니다.");
-        }
+		if (locationKey == null || locationKey.isBlank()) {
+			throw new IllegalArgumentException("NPC 위치 키는 필수입니다.");
+		}
 
-    }
+		if (locationKey.length() > 100) {
+			throw new IllegalArgumentException("NPC 위치 키는 100자를 초과할 수 없습니다.");
+		}
+
+	}
 }

@@ -24,53 +24,77 @@ public class SecurityConfig {
 
 			.formLogin(AbstractHttpConfigurer::disable)
 
-			.sessionManagement( config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
 			.authorizeHttpRequests(auth -> auth
 
-				.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+				.requestMatchers(CorsUtils::isPreFlightRequest)
+				.permitAll()
 
 				// 인증
-				.requestMatchers(HttpMethod.POST,"/api/v1/auth/login").anonymous()
-				.requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
-				.requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/v1/auth/login")
+				.anonymous()
+				.requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh")
+				.permitAll()
+				.requestMatchers(HttpMethod.POST, "/api/v1/auth/logout")
+				.authenticated()
 
 				// 유저
-				.requestMatchers(HttpMethod.POST, "/api/v1/users/register").anonymous()
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/me").authenticated()
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/data").authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/v1/users/register")
+				.anonymous()
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/me")
+				.authenticated()
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/data")
+				.authenticated()
 
 				// 아이템
-				.requestMatchers(HttpMethod.GET, "/api/v1/items").permitAll()
-				.requestMatchers(HttpMethod.GET, "/api/v1/items/{id}").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/v1/items")
+				.permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/v1/items/{id}")
+				.permitAll()
 
 				// 친구
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/friends").authenticated()
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/friends/requests").authenticated()
-				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/friends/requests").authenticated()
-				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/friends/requests/{requestId}/accept").authenticated()
-				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/friends/requests/{requestId}/decline").authenticated()
-				.requestMatchers(HttpMethod.DELETE, "/api/v1/users/me/friends/requests/{requestId}").authenticated()
-				.requestMatchers(HttpMethod.DELETE, "/api/v1/users/me/friends/{friendUserId}").authenticated()
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/friends")
+				.authenticated()
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/friends/requests")
+				.authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/friends/requests")
+				.authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/friends/requests/{requestId}/accept")
+				.authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/friends/requests/{requestId}/decline")
+				.authenticated()
+				.requestMatchers(HttpMethod.DELETE, "/api/v1/users/me/friends/requests/{requestId}")
+				.authenticated()
+				.requestMatchers(HttpMethod.DELETE, "/api/v1/users/me/friends/{friendUserId}")
+				.authenticated()
 
 				// 인벤토리
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/inventory").authenticated()
-				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/inventory/pickup").authenticated()
-				.requestMatchers(HttpMethod.DELETE, "/api/v1/users/me/inventory/{itemId}/discard").authenticated()
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/inventory")
+				.authenticated()
+				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/inventory/pickup")
+				.authenticated()
+				.requestMatchers(HttpMethod.DELETE, "/api/v1/users/me/inventory/{itemId}/discard")
+				.authenticated()
 
 				// 프로필
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/profile").authenticated()
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/profile")
+				.authenticated()
 
 				// 지갑
-				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/wallet").authenticated()
+				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/wallet")
+				.authenticated()
 
 				// NPC
-				.requestMatchers(HttpMethod.GET, "/api/v1/npcs").permitAll()
-				.requestMatchers(HttpMethod.GET, "/api/v1/npcs/{id}").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/v1/npcs")
+				.permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/v1/npcs/{id}")
+				.permitAll()
 				.requestMatchers(
 					HttpMethod.POST,
 					"/api/v1/users/me/npcs/{npcId}/items/{npcItemId}/purchase"
-				).authenticated()
+				)
+				.authenticated()
 				.anyRequest()
 				.authenticated()
 			)
