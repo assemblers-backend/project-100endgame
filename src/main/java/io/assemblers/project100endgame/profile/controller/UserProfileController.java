@@ -19,7 +19,13 @@ public class UserProfileController {
 
 	@GetMapping
 	public ResponseEntity<GeneralResponse<ProfileResponse>> getProfile() {
-		Long userId = 3L;
+		Long userId = 1L; // TODO: 인증 구현 후 User.getUserId()로 변경
+		/*
+		public ResponseEntity<ApiResponse<List<UserItemResponse>>> getInventory(
+        @AuthenticationPrincipal CustomUserDetails userDetails
+) {
+    Long userId = userDetails.getUserId();
+		 */
 
 		return ResponseEntity.ok(
 			GeneralResponse.success("프로필을 조회했습니다.", userProfileService.getProfile(userId))

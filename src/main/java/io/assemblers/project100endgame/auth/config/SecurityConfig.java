@@ -82,7 +82,7 @@ public class SecurityConfig {
 
 				// 프로필
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/profile")
-				.permitAll()
+				.authenticated()
 
 				// 지갑
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/wallet")
