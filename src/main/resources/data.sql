@@ -163,3 +163,15 @@ VALUES (1,
         NOW(),
         NOW());
 
+INSERT INTO wallets (id,
+                     user_id,
+                     gold,
+                     gem,
+                     created_at,
+                     updated_at)
+VALUES (1,
+        1,
+        3000,
+        10,
+        NOW(),
+        NOW());
