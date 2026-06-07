@@ -29,21 +29,22 @@ public class TokenProvider {
 		return new TokenPair(accessToken, refreshToken);
 	}
 
-	private String issue(Long id, Long validTime) {
+	private String issue(Long id, Long validTime, Boolean isAccess) {
 		return Jwts.builder()
 			.subject(id.toString())
 			.issuedAt(new Date())
 			.expiration(new Date(new Date().getTime() + validTime))
+			.claim("isAccess", isAccess)
 			.signWith(getSecretKey())
 			.compact();
 	}
 
 	public String issueAccessToken(Long id) {
-		return issue(id, jwtProperties.getValidations().getAccess());
+		return issue(id, jwtProperties.getValidations().getAccess(), true);
 	}
 
 	public String issueRefreshToken(Long id) {
-		return issue(id, jwtProperties.getValidations().getRefresh());
+		return issue(id, jwtProperties.getValidations().getRefresh(), false);
 	}
 
 	private SecretKey getSecretKey() {
@@ -52,7 +53,7 @@ public class TokenProvider {
 
 	public boolean validate(String token) {
 		try {
-			parseId(token);
+			parseClaims(token);
 			return true;
 		} catch ( JwtException e ) {
 			log.error("Token validation failed: {}", e.getMessage());
@@ -65,14 +66,11 @@ public class TokenProvider {
 		return false;
 	}
 
-	public Long parseId(String token) {
-		return Long.parseLong(
-			Jwts.parser()
+	public Claims parseClaims(String token) {
+		return Jwts.parser()
 			.verifyWith(getSecretKey())
 			.build()
 			.parseSignedClaims(token)
-			.getPayload()
-			.getSubject()
-		);
+			.getPayload();
 	}
 }

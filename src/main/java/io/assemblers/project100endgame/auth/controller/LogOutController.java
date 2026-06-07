@@ -33,7 +33,11 @@ public class LogOutController {
 			throw new LogOutFailedException("인증이 필요합니다.");
 		}
 
-		Long id = tokenProvider.parseId(token);
+		if (!tokenProvider.validate(token)) {
+			throw new LogOutFailedException("유효하지 않은 토큰입니다.");
+		}
+
+		Long id = Long.valueOf(tokenProvider.parseClaims(token).get("id").toString());
 
 		tokenService.logOut(id);
 
