@@ -70,6 +70,7 @@ public class SecurityConfig {
 				.authenticated()
 
 				// 인벤토리
+				// TODO: 인벤토리 권한 authenticated으로 수정
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/inventory")
 				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/api/v1/users/me/inventory/pickup")
