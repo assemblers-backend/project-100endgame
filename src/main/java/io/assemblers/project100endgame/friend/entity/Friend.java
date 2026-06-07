@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,23 +21,24 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "friend_requests")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Friend extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "from_user_id", nullable = false)
-	Users fromUser;
+	private Users fromUser;
 
 	@ManyToOne
 	@JoinColumn(name = "to_user_id", nullable = false)
-	Users toUser;
+	private Users toUser;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	Status status = Status.PENDING;
+	private FriendStatus friendStatus = FriendStatus.PENDING;
 
 	@Builder
 	public Friend(Users fromUser, Users toUser) {
@@ -47,5 +49,29 @@ public class Friend extends BaseEntity {
 			|| (this.fromUser.getId() != null && this.fromUser.getId().equals(this.toUser.getId()))) {
 			throw new IllegalArgumentException("자기 자신을 친구로 추가할 수 없습니다.");
 		}
+	}
+
+	public void accept() {
+		if (this.friendStatus != FriendStatus.PENDING) {
+			throw new IllegalStateException("대기 중인 친구 요청만 수락할 수 있습니다.");
+		}
+
+		this.friendStatus = FriendStatus.ACCEPTED;
+	}
+
+	public void decline() {
+		if (this.friendStatus != FriendStatus.PENDING) {
+			throw new IllegalStateException("대기 중인 친구 요청만 거절할 수 있습니다.");
+		}
+
+		this.friendStatus = FriendStatus.DECLINED;
+	}
+
+	public void cancel() {
+		if (this.friendStatus != FriendStatus.PENDING) {
+			throw new IllegalStateException("대기 중인 친구 요청만 취소할 수 있습니다.");
+		}
+
+		this.friendStatus = FriendStatus.CANCELED;
 	}
 }
