@@ -9,7 +9,7 @@ import io.assemblers.project100endgame.common.dto.GeneralResponse;
 import io.assemblers.project100endgame.item.exception.ItemNotFoundException;
 import io.assemblers.project100endgame.npc.exception.NpcNotFoundException;
 import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
-import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuentityException;
+import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuantityException;
 import io.assemblers.project100endgame.useritem.exception.UserItemNotFoundException;
 
 @RestControllerAdvice
@@ -52,9 +52,9 @@ public class GlobalExceptionHandler {
 			.body(GeneralResponse.fail(e.getMessage()));
 	}
 
-	@ExceptionHandler(NotEnoughItemQuentityException.class)
+	@ExceptionHandler(NotEnoughItemQuantityException.class)
 	public ResponseEntity<GeneralResponse<Void>> handleNotEnoughItemQuantityException(
-		NotEnoughItemQuentityException e
+		NotEnoughItemQuantityException e
 	) {
 		return ResponseEntity
 			.badRequest()
