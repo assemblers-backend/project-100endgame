@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import io.assemblers.project100endgame.common.dto.GeneralResponse;
 import io.assemblers.project100endgame.item.exception.ItemNotFoundException;
 import io.assemblers.project100endgame.npc.exception.NpcNotFoundException;
+import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,6 +31,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<GeneralResponse<Void>> handleNpcNotFoundException(NpcNotFoundException e) {
 		return ResponseEntity
 			.status(HttpStatus.NOT_FOUND)
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(InvalidItemQuantityException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleInvalidItemQuantityException(InvalidItemQuantityException e) {
+		return ResponseEntity
+			.badRequest()
 			.body(GeneralResponse.fail(e.getMessage()));
 	}
 
