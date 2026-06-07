@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import io.assemblers.project100endgame.common.entity.BaseEntity;
 import io.assemblers.project100endgame.item.entity.Item;
 import io.assemblers.project100endgame.user.entity.Users;
+import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
+import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuentityException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -83,7 +85,7 @@ public class UserItem extends BaseEntity {
 		validateQuantity(quantity);
 
 		if (this.quantity < quantity) {
-			throw new IllegalArgumentException("보유 수량보다 많이 감소시킬 수 없습니다.");
+			throw new NotEnoughItemQuentityException();
 		}
 
 		this.quantity -= quantity;
@@ -93,13 +95,13 @@ public class UserItem extends BaseEntity {
 		}
 	}
 
-	public void equip() {
-		this.equipped = true;
-	}
-
-	public void unequip() {
-		this.equipped = false;
-	}
+	// public void equip() {
+	// 	this.equipped = true;
+	// }
+	//
+	// public void unequip() {
+	// 	this.equipped = false;
+	// }
 
 	private static void validateUser(Users user) {
 		if (user == null) {
@@ -115,7 +117,11 @@ public class UserItem extends BaseEntity {
 
 	private static void validateQuantity(Long quantity) {
 		if (quantity == null || quantity <= 0) {
-			throw new IllegalArgumentException("아이템 수량은 1 이상이어야 합니다.");
+			throw new InvalidItemQuantityException();
 		}
+	}
+
+	public boolean isEmpty() {
+		return this.quantity == 0;
 	}
 }

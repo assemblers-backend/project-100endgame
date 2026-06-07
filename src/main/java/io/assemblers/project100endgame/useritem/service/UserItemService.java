@@ -13,6 +13,7 @@ import io.assemblers.project100endgame.useritem.dto.ItemPickupRequest;
 import io.assemblers.project100endgame.useritem.dto.UserItemResponse;
 import io.assemblers.project100endgame.useritem.entity.UserItem;
 import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
+import io.assemblers.project100endgame.useritem.exception.UserItemNotFoundException;
 import io.assemblers.project100endgame.useritem.repository.UserItemRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,27 @@ public class UserItemService {
 		}
 
 		if (request.quantity() == null || request.quantity() <= 0) {
+			throw new InvalidItemQuantityException();
+		}
+	}
+
+	@Transactional
+	public void discardItem(Long userId, Long itemId, Long quantity) {
+		validateDiscardQuantity(quantity);
+
+		UserItem userItem = userItemRepository
+			.findByUserIdAndItemIdWithItem(userId, itemId)
+			.orElseThrow(UserItemNotFoundException::new);
+
+		userItem.decreaseQuantity(quantity);
+
+		if (userItem.isEmpty()) {
+			userItemRepository.delete(userItem);
+		}
+	}
+
+	private void validateDiscardQuantity(Long quantity) {
+		if (quantity == null || quantity <= 0) {
 			throw new InvalidItemQuantityException();
 		}
 	}
