@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.assemblers.project100endgame.common.dto.GeneralResponse;
+import io.assemblers.project100endgame.useritem.dto.ItemPickupRequest;
 import io.assemblers.project100endgame.useritem.dto.UserItemResponse;
 import io.assemblers.project100endgame.useritem.service.UserItemService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,17 @@ public class UserItemController {
 
 		return ResponseEntity.ok(
 			GeneralResponse.success("인벤토리를 조회했습니다.", userItemService.getInventory(userId))
+		);
+	}
+
+	@PostMapping("/pickup")
+	public ResponseEntity<GeneralResponse<UserItemResponse>> pickupItem(
+		@RequestBody ItemPickupRequest request
+	) {
+		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+
+		return ResponseEntity.ok(
+			GeneralResponse.success("아이템을 획득했습니다.", userItemService.pickupItem(userId, request))
 		);
 	}
 }
