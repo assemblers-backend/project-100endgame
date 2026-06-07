@@ -1,7 +1,5 @@
 package io.assemblers.project100endgame.auth.controller;
 
-import java.util.Objects;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,11 +13,13 @@ import io.assemblers.project100endgame.auth.dto.LogInRequest;
 import io.assemblers.project100endgame.auth.dto.TokenResponse;
 import io.assemblers.project100endgame.auth.dto.TokenPair;
 import io.assemblers.project100endgame.auth.exception.LogInFailedException;
+import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.auth.service.TokenProvider;
 import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.user.repository.UsersRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,10 +33,12 @@ public class LogInController {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtProperties jwtProperties;
 	private final TokenService tokenService;
+	private final TokenRepository tokenRepository;
 
 	@PostMapping
 	public ResponseEntity<GeneralResponse<TokenResponse>> login(
-		@RequestBody LogInRequest logInRequest) {
+		@RequestBody LogInRequest logInRequest,
+		HttpServletRequest request) {
 
 		String email = logInRequest.email();
 		String password = logInRequest.password();
@@ -47,13 +49,17 @@ public class LogInController {
 			throw new LogInFailedException("이메일 또는 비밀번호가 올바르지 않습니다.");
 		}
 
-		TokenPair tokenPair = tokenProvider.issueTokenPair(user.getId());
+		String oldRefreshToken = tokenRepository.findByUserId(user.getId()).getToken();
+		String oldAccessToken = tokenService.resolveToken(request);
 
-		tokenService.tokenRotator(user.getId(), tokenPair.refreshToken());
+		TokenPair oldTokenPair = new TokenPair(oldAccessToken, oldRefreshToken);
+		TokenPair NewTokenPair = tokenProvider.issueTokenPair(user.getId());
+
+		tokenService.tokenRotator(user.getId(), oldTokenPair, NewTokenPair);
 
 		TokenResponse logInResponse = new TokenResponse(
-			tokenPair.accessToken(),
-			tokenPair.refreshToken(),
+			NewTokenPair.accessToken(),
+			NewTokenPair.refreshToken(),
 			jwtProperties.getValidations().getAccess() / 1000L
 		);
 

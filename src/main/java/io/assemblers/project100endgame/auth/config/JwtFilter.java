@@ -42,8 +42,6 @@ public class JwtFilter extends OncePerRequestFilter {
 			try {
 				Long tokenId = tokenProvider.parseId(token);
 
-				tokenService.accessTokenBlacklistValidate(token);
-
 				UsersDetails usersDetails = usersService.loadUserById(tokenId);
 
 				Authentication authentication = new UsernamePasswordAuthenticationToken(

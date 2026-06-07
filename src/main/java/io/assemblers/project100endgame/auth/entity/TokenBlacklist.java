@@ -5,9 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,10 +18,11 @@ public class TokenBlacklist {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@OneToOne
-	@JoinColumn(unique = true, nullable = false)
-	RefreshToken refreshToken;
+	@Column(unique = true, nullable = false)
+	String refreshToken;
 
-	@Column(unique = true, nullable = false, length = 255)
-	String accessToken;
+	@Builder
+	public TokenBlacklist(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 }

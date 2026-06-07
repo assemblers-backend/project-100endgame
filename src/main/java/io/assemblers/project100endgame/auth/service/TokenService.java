@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.assemblers.project100endgame.auth.dto.TokenPair;
 import io.assemblers.project100endgame.auth.entity.RefreshToken;
+import io.assemblers.project100endgame.auth.entity.TokenBlacklist;
 import io.assemblers.project100endgame.auth.exception.UserNotFoundException;
 import io.assemblers.project100endgame.auth.repository.TokenBlacklistRepository;
 import io.assemblers.project100endgame.auth.repository.TokenRepository;
@@ -23,27 +25,32 @@ public class TokenService {
 	private final TokenRepository tokenRepository;
 	private final TokenBlacklistRepository tokenBlacklistRepository;
 	private final UsersRepository usersRepository;
+	private final TokenProvider tokenProvider;
 
 	@Transactional
-	public void tokenRotator(Long userId, String newRefreshToken) {
+	public void tokenRotator(Long userId, TokenPair oldTokenPair, TokenPair newTokenPair) {
 		Optional<Users> findUser = usersRepository.findById(userId);
 
 		Users user = findUser.orElseThrow(() -> new UserNotFoundException(userId));
 
-		RefreshToken refreshToken = tokenRepository.findByUserId(userId);
-
-		if (refreshToken != null) {
+		if (oldTokenPair != null) {
 			tokenRepository.deleteByUserId(userId);
 			tokenRepository.flush();
+
+			if (tokenProvider.validate(oldTokenPair.refreshToken())) {
+				addTokenBlacklist(oldTokenPair);
+			}
 		}
 
 		tokenRepository.save(
 				new RefreshToken(
 				user,
-				newRefreshToken
+				newTokenPair.refreshToken()
 			)
 		);
 	}
+
+
 
 	@Transactional
 	public void logOut(Long id) {
@@ -63,5 +70,15 @@ public class TokenService {
 		if (tokenBlacklistRepository.findByAccessToken(token) != null) {
 			throw new JwtException("AccessToken이 만료되었습니다.");
 		}
+	}
+
+	@Transactional
+	public void addTokenBlacklist(TokenPair tokens) {
+		tokenBlacklistRepository.save(
+			TokenBlacklist.builder()
+				.accessToken(tokens.accessToken())
+				.refreshToken(tokens.refreshToken())
+				.build()
+		);
 	}
 }

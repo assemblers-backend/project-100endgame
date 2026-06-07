@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import io.assemblers.project100endgame.auth.config.properties.JwtProperties;
 import io.assemblers.project100endgame.auth.dto.RefreshRequest;
 import io.assemblers.project100endgame.auth.dto.TokenPair;
@@ -19,6 +17,7 @@ import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.auth.service.TokenProvider;
 import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +32,9 @@ public class RefreshController {
 	private final JwtProperties jwtProperties;
 
 	@PostMapping
-	public ResponseEntity<GeneralResponse<TokenResponse>> refresh(@RequestBody RefreshRequest refreshRequest) {
+	public ResponseEntity<GeneralResponse<TokenResponse>> refresh(
+		@RequestBody RefreshRequest refreshRequest,
+		HttpServletRequest request) {
 		String token = refreshRequest.refreshToken();
 		RefreshToken refreshToken = tokenRepository.findByToken(token);
 
@@ -43,13 +44,16 @@ public class RefreshController {
 
 		Long userId = refreshToken.getUser().getId();
 
-		TokenPair tokenPair = tokenProvider.issueTokenPair(refreshToken.getUser().getId());
+		TokenPair newTokenPair = tokenProvider.issueTokenPair(refreshToken.getUser().getId());
 
-		tokenService.tokenRotator(userId, tokenPair.refreshToken());
+		String oldAccessToken = tokenService.resolveToken(request);
+		TokenPair oldTokenPair = new TokenPair(oldAccessToken, token);
+
+		tokenService.tokenRotator(userId, oldTokenPair, newTokenPair);
 
 		TokenResponse tokenResponse = new TokenResponse(
-			tokenPair.accessToken(),
-			tokenPair.refreshToken(),
+			newTokenPair.accessToken(),
+			newTokenPair.refreshToken(),
 			jwtProperties.getValidations().getAccess() / 1000L
 		);
 
