@@ -11,6 +11,7 @@ import io.assemblers.project100endgame.npc.exception.NpcNotFoundException;
 import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
 import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuantityException;
 import io.assemblers.project100endgame.useritem.exception.UserItemNotFoundException;
+import io.assemblers.project100endgame.wallet.exception.WalletNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -58,6 +59,13 @@ public class GlobalExceptionHandler {
 	) {
 		return ResponseEntity
 			.badRequest()
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(WalletNotFoundException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleWalletNotFoundException(WalletNotFoundException e) {
+		return ResponseEntity
+			.status(HttpStatus.NOT_FOUND)
 			.body(GeneralResponse.fail(e.getMessage()));
 	}
 }
