@@ -175,3 +175,18 @@ VALUES (1,
         10,
         NOW(),
         NOW());
+
+INSERT INTO user_profiles (id,
+                           user_id,
+                           level,
+                           exp,
+                           total_play_seconds,
+                           created_at,
+                           updated_at)
+VALUES (1,
+        1,
+        1,
+        0,
+        0,
+        NOW(),
+        NOW());

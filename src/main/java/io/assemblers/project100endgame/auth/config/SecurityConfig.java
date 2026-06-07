@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final JwtFilter jwtFilter;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 		return http
@@ -81,7 +82,7 @@ public class SecurityConfig {
 
 				// 프로필
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/profile")
-				.authenticated()
+				.permitAll()
 
 				// 지갑
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/wallet")
