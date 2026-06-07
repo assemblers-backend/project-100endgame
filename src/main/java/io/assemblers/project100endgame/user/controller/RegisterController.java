@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/user/register")
+@RequestMapping("/api/v1/users/register")
 @RequiredArgsConstructor
 public class RegisterController {
 	private final UsersRepository usersRepository;
@@ -54,7 +54,7 @@ public class RegisterController {
 			user.getProvider(),
 			user.getProfileImageUrl(),
 			user.getCreatedAt().toString(),
-			user.getLastLogInAt().toString()
+			null
 		);
 
 		return ResponseEntity.status(HttpStatus.OK)
