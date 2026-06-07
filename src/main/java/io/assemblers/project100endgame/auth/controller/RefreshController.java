@@ -55,7 +55,7 @@ public class RefreshController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.<TokenResponse>builder()
 				.success(true)
-				.message(null)
+				.msg(null)
 				.data(tokenResponse)
 				.build()
 			);

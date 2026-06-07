@@ -60,7 +60,7 @@ public class LogInController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.<TokenResponse>builder()
 				.success(true)
-				.message("로그인되었습니다.")
+				.msg("로그인되었습니다.")
 				.data(logInResponse)
 				.build()
 		);

@@ -17,7 +17,7 @@ public class AuthExceptionHandler {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			.body(GeneralResponse.builder()
 				.success(false)
-				.message(e.getMessage())
+				.msg(e.getMessage())
 				.data(null)
 				.build()
 			);
@@ -28,7 +28,7 @@ public class AuthExceptionHandler {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			.body(GeneralResponse.builder()
 				.success(false)
-				.message(e.getMessage())
+				.msg(e.getMessage())
 				.data(null)
 				.build()
 			);
@@ -39,7 +39,7 @@ public class AuthExceptionHandler {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			.body(GeneralResponse.builder()
 				.success(false)
-				.message(e.getMessage())
+				.msg(e.getMessage())
 				.data(null)
 				.build()
 			);

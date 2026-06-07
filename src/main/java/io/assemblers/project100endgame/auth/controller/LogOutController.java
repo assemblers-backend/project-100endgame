@@ -44,7 +44,7 @@ public class LogOutController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.builder()
 				.success(true)
-				.message("로그아웃되었습니다.")
+				.msg("로그아웃되었습니다.")
 				.data(null)
 				.build()
 		);

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import io.assemblers.project100endgame.common.dto.GeneralResponse;
+import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.item.exception.ItemNotFoundException;
 import io.assemblers.project100endgame.npc.exception.NpcNotFoundException;
 import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
