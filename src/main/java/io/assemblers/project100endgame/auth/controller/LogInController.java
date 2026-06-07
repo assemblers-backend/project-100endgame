@@ -36,9 +36,7 @@ public class LogInController {
 	private final TokenRepository tokenRepository;
 
 	@PostMapping
-	public ResponseEntity<GeneralResponse<TokenResponse>> login(
-		@RequestBody LogInRequest logInRequest,
-		HttpServletRequest request) {
+	public ResponseEntity<GeneralResponse<TokenResponse>> login(@RequestBody LogInRequest logInRequest) {
 
 		String email = logInRequest.email();
 		String password = logInRequest.password();
@@ -49,13 +47,9 @@ public class LogInController {
 			throw new LogInFailedException("이메일 또는 비밀번호가 올바르지 않습니다.");
 		}
 
-		String oldRefreshToken = tokenRepository.findByUserId(user.getId()).getToken();
-		String oldAccessToken = tokenService.resolveToken(request);
-
-		TokenPair oldTokenPair = new TokenPair(oldAccessToken, oldRefreshToken);
 		TokenPair NewTokenPair = tokenProvider.issueTokenPair(user.getId());
 
-		tokenService.tokenRotator(user.getId(), oldTokenPair, NewTokenPair);
+		tokenService.tokenRotator(user.getId(), NewTokenPair.refreshToken());
 
 		TokenResponse logInResponse = new TokenResponse(
 			NewTokenPair.accessToken(),

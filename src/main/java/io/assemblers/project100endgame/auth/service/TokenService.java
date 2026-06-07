@@ -13,7 +13,6 @@ import io.assemblers.project100endgame.auth.repository.TokenBlacklistRepository;
 import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.user.repository.UsersRepository;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,36 +24,35 @@ public class TokenService {
 	private final TokenRepository tokenRepository;
 	private final TokenBlacklistRepository tokenBlacklistRepository;
 	private final UsersRepository usersRepository;
-	private final TokenProvider tokenProvider;
 
 	@Transactional
-	public void tokenRotator(Long userId, TokenPair oldTokenPair, TokenPair newTokenPair) {
+	public void tokenRotator(Long userId, String newToken) {
 		Optional<Users> findUser = usersRepository.findById(userId);
 
 		Users user = findUser.orElseThrow(() -> new UserNotFoundException(userId));
 
-		if (oldTokenPair != null) {
+		RefreshToken refreshToken = tokenRepository.findByUserId(user.getId());
+
+		if (refreshToken != null) {
+			addTokenBlacklist(refreshToken.getToken());
+
 			tokenRepository.deleteByUserId(userId);
 			tokenRepository.flush();
-
-			if (tokenProvider.validate(oldTokenPair.refreshToken())) {
-				addTokenBlacklist(oldTokenPair);
-			}
 		}
 
 		tokenRepository.save(
 				new RefreshToken(
 				user,
-				newTokenPair.refreshToken()
+				newToken
 			)
 		);
 	}
 
-
-
 	@Transactional
 	public void logOut(Long id) {
+		String token = tokenRepository.findByUserId(id).getToken();
 		tokenRepository.deleteById(id);
+		addTokenBlacklist(token);
 	}
 
 	public String resolveToken(HttpServletRequest request) {
@@ -66,18 +64,15 @@ public class TokenService {
 		return null;
 	}
 
-	public void accessTokenBlacklistValidate(String token) {
-		if (tokenBlacklistRepository.findByAccessToken(token) != null) {
-			throw new JwtException("AccessToken이 만료되었습니다.");
-		}
+	public boolean isTokenBan(String token) {
+		return tokenBlacklistRepository.findByRefreshToken(token) != null;
 	}
 
 	@Transactional
-	public void addTokenBlacklist(TokenPair tokens) {
+	public void addTokenBlacklist(String token) {
 		tokenBlacklistRepository.save(
 			TokenBlacklist.builder()
-				.accessToken(tokens.accessToken())
-				.refreshToken(tokens.refreshToken())
+				.refreshToken(token)
 				.build()
 		);
 	}

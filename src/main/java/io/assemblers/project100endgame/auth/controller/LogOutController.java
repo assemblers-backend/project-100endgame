@@ -33,16 +33,9 @@ public class LogOutController {
 			throw new LogOutFailedException("인증이 필요합니다.");
 		}
 
-		tokenService.accessTokenBlacklistValidate(token);
-
 		Long id = tokenProvider.parseId(token);
 
-		String refreshToken = tokenRepository.findByUserId(id).getToken();
-
-		TokenPair tokenPair = new TokenPair(token, refreshToken);
-
 		tokenService.logOut(id);
-		tokenService.addTokenBlacklist(tokenPair);
 
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.builder()

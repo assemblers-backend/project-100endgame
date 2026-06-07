@@ -32,13 +32,11 @@ public class RefreshController {
 	private final JwtProperties jwtProperties;
 
 	@PostMapping
-	public ResponseEntity<GeneralResponse<TokenResponse>> refresh(
-		@RequestBody RefreshRequest refreshRequest,
-		HttpServletRequest request) {
+	public ResponseEntity<GeneralResponse<TokenResponse>> refresh(@RequestBody RefreshRequest refreshRequest) {
 		String token = refreshRequest.refreshToken();
 		RefreshToken refreshToken = tokenRepository.findByToken(token);
 
-		if (refreshToken == null || !tokenProvider.validate(token)) {
+		if (refreshToken == null || !tokenProvider.validate(token) || tokenService.isTokenBan(token)) {
 			throw new InvalidRefreshTokenException("유효하지 않은 Refresh Token입니다");
 		}
 
@@ -46,10 +44,7 @@ public class RefreshController {
 
 		TokenPair newTokenPair = tokenProvider.issueTokenPair(refreshToken.getUser().getId());
 
-		String oldAccessToken = tokenService.resolveToken(request);
-		TokenPair oldTokenPair = new TokenPair(oldAccessToken, token);
-
-		tokenService.tokenRotator(userId, oldTokenPair, newTokenPair);
+		tokenService.tokenRotator(userId, newTokenPair.refreshToken());
 
 		TokenResponse tokenResponse = new TokenResponse(
 			newTokenPair.accessToken(),
