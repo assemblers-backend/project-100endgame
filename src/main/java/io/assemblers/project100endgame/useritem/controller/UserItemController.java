@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.assemblers.project100endgame.common.dto.GeneralResponse;
@@ -11,8 +12,9 @@ import io.assemblers.project100endgame.useritem.dto.UserItemResponse;
 import io.assemblers.project100endgame.useritem.service.UserItemService;
 import lombok.RequiredArgsConstructor;
 
-@RestController("/api/v1/users/me/inventory")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/users/me/inventory")
 public class UserItemController {
 
 	private final UserItemService userItemService;
