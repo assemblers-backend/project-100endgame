@@ -6,7 +6,7 @@ import io.assemblers.project100endgame.common.entity.BaseEntity;
 import io.assemblers.project100endgame.item.entity.Item;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
-import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuentityException;
+import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuantityException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -85,7 +85,7 @@ public class UserItem extends BaseEntity {
 		validateQuantity(quantity);
 
 		if (this.quantity < quantity) {
-			throw new NotEnoughItemQuentityException();
+			throw new NotEnoughItemQuantityException();
 		}
 
 		this.quantity -= quantity;
