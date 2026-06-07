@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.assemblers.project100endgame.common.response.ApiResponse;
+import io.assemblers.project100endgame.common.dto.GeneralResponse;
 import io.assemblers.project100endgame.item.dto.ItemResponse;
 import io.assemblers.project100endgame.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +20,12 @@ public class ItemController {
 	private final ItemService itemService;
 
 	@GetMapping
-	public ApiResponse<List<ItemResponse>> getItems() {
-		return ApiResponse.success(itemService.getItems());
+	public GeneralResponse<List<ItemResponse>> getItems() {
+		return GeneralResponse.success(itemService.getItems());
 	}
 
 	@GetMapping("/{id}")
-	public ApiResponse<ItemResponse> getItem(@PathVariable Long id) {
-		return ApiResponse.success(itemService.getItem(id));
+	public GeneralResponse<ItemResponse> getItem(@PathVariable Long id) {
+		return GeneralResponse.success(itemService.getItem(id));
 	}
 }
