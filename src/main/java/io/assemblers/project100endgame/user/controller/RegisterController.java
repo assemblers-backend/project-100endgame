@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.assemblers.project100endgame.auth.dto.TokenResponse;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.user.dto.RegisterRequest;
-import io.assemblers.project100endgame.user.dto.RegisterResponse;
+import io.assemblers.project100endgame.user.dto.UserResponse;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.user.exception.ExistEmailException;
 import io.assemblers.project100endgame.user.exception.InvalidPasswordException;
@@ -28,7 +27,7 @@ public class RegisterController {
 	private final UsersService usersService;
 
 	@PostMapping
-	public ResponseEntity<GeneralResponse<RegisterResponse>> register(@RequestBody RegisterRequest registerRequest) {
+	public ResponseEntity<GeneralResponse<UserResponse>> register(@RequestBody RegisterRequest registerRequest) {
 		String email = registerRequest.email();
 		String password = registerRequest.password();
 		String nickname = registerRequest.nickname();
@@ -45,7 +44,7 @@ public class RegisterController {
 
 		Users user = usersRepository.findByEmail(email);
 
-		RegisterResponse registerResponse = new RegisterResponse(
+		UserResponse userResponse = new UserResponse(
 			user.getId(),
 			email,
 			nickname,
@@ -58,10 +57,10 @@ public class RegisterController {
 		);
 
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(GeneralResponse.<RegisterResponse>builder()
+			.body(GeneralResponse.<UserResponse>builder()
 				.success(true)
 				.msg("가입되었습니다.")
-				.data(registerResponse)
+				.data(userResponse)
 				.build()
 			);
 	}

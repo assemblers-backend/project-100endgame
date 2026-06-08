@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import io.assemblers.project100endgame.auth.exception.LogOutFailedException;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.user.exception.ExistEmailException;
 import io.assemblers.project100endgame.user.exception.InvalidPasswordException;

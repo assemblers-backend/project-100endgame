@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.assemblers.project100endgame.auth.dto.TokenPair;
 import io.assemblers.project100endgame.auth.entity.RefreshToken;
 import io.assemblers.project100endgame.auth.entity.TokenBlacklist;
+import io.assemblers.project100endgame.auth.exception.AuthFailedException;
 import io.assemblers.project100endgame.auth.exception.UserNotFoundException;
 import io.assemblers.project100endgame.auth.repository.TokenBlacklistRepository;
 import io.assemblers.project100endgame.auth.repository.TokenRepository;
@@ -24,6 +24,7 @@ public class TokenService {
 	private final TokenRepository tokenRepository;
 	private final TokenBlacklistRepository tokenBlacklistRepository;
 	private final UsersRepository usersRepository;
+	private final TokenProvider tokenProvider;
 
 	@Transactional
 	public void tokenRotator(Long userId, String newToken) {
@@ -67,6 +68,28 @@ public class TokenService {
 			return bearerToken.substring(7);
 		}
 		return null;
+	}
+
+	public Long authValidate(HttpServletRequest request) {
+		String token = resolveToken(request);
+
+		if (token == null) {
+			throw new AuthFailedException("인증이 필요합니다.");
+		}
+
+		if (!tokenProvider.validate(token)) {
+			throw new AuthFailedException("유효하지 않은 토큰입니다.");
+		}
+
+		Long id = Long.valueOf(tokenProvider.parseClaims(token).getSubject());
+
+		RefreshToken refreshToken = tokenRepository.findByUserId(id);
+
+		if (refreshToken == null || isTokenBan(refreshToken.getToken())) {
+			throw new AuthFailedException("유효하지 않은 토큰입니다.");
+		}
+
+		return id;
 	}
 
 	public boolean isTokenBan(String token) {

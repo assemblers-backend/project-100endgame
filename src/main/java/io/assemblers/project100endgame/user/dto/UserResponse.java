@@ -1,6 +1,6 @@
 package io.assemblers.project100endgame.user.dto;
 
-public record RegisterResponse(
+public record UserResponse(
 	Long userId,
 	String email,
 	String nickname,
