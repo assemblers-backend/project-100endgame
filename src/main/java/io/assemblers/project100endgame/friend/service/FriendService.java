@@ -11,6 +11,7 @@ import io.assemblers.project100endgame.friend.entity.Friend;
 import io.assemblers.project100endgame.friend.entity.FriendStatus;
 import io.assemblers.project100endgame.friend.exception.DuplicateFriendRequestException;
 import io.assemblers.project100endgame.friend.exception.FriendRequestAcceptNotAllowedException;
+import io.assemblers.project100endgame.friend.exception.FriendRequestDeclineNotAllowedException;
 import io.assemblers.project100endgame.friend.exception.FriendRequestNotFoundException;
 import io.assemblers.project100endgame.friend.exception.FriendTargetNotFoundException;
 import io.assemblers.project100endgame.friend.exception.SelfFriendRequestException;
@@ -96,5 +97,18 @@ public class FriendService {
 		friend.accept();
 
 		return FriendResponse.requestFrom(friend);
+	}
+
+	@Transactional
+	public void declineFriendRequest(Long userId, Long requestId) {
+		Friend friend = friendRepository
+			.findByIdAndFriendStatusWithUsers(requestId, FriendStatus.PENDING)
+			.orElseThrow(FriendRequestNotFoundException::new);
+
+		if (!friend.getToUser().getId().equals(userId)) {
+			throw new FriendRequestDeclineNotAllowedException();
+		}
+
+		friend.decline();
 	}
 }
