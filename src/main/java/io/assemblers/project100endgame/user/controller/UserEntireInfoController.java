@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import io.assemblers.project100endgame.auth.exception.UserNotFoundException;
 import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
+import io.assemblers.project100endgame.friend.entity.Friend;
+import io.assemblers.project100endgame.friend.entity.FriendStatus;
+import io.assemblers.project100endgame.friend.repository.FriendRepository;
+import io.assemblers.project100endgame.profile.entity.UserProfile;
+import io.assemblers.project100endgame.profile.exception.ProfileNotFoundException;
+import io.assemblers.project100endgame.profile.repository.UserProfileRepository;
 import io.assemblers.project100endgame.user.dto.ProfileDto;
 import io.assemblers.project100endgame.user.dto.UserEntireInfoResponse;
 import io.assemblers.project100endgame.user.dto.UserResponse;
@@ -21,6 +27,9 @@ import io.assemblers.project100endgame.user.repository.UsersRepository;
 import io.assemblers.project100endgame.useritem.dto.UserItemResponse;
 import io.assemblers.project100endgame.useritem.repository.UserItemRepository;
 import io.assemblers.project100endgame.useritem.service.UserItemService;
+import io.assemblers.project100endgame.wallet.entity.Wallet;
+import io.assemblers.project100endgame.wallet.exception.WalletNotFoundException;
+import io.assemblers.project100endgame.wallet.repository.WalletRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +41,10 @@ import lombok.extern.slf4j.Slf4j;
 public class UserEntireInfoController {
 	private final TokenService tokenService;
 	private final UsersRepository usersRepository;
-	private final UserItemRepository userItemRepository;
 	private final UserItemService userItemService;
+	private final WalletRepository walletRepository;
+	private final UserProfileRepository userProfileRepository;
+	private final FriendRepository friendRepository;
 
 	@GetMapping
 	public ResponseEntity<GeneralResponse<UserEntireInfoResponse>> userEntireInfo(HttpServletRequest request) {
@@ -45,6 +56,9 @@ public class UserEntireInfoController {
 		}
 
 		Users user = byId.get();
+		Wallet wallet = walletRepository.findByUserId(id).orElseThrow(WalletNotFoundException::new);
+		UserProfile profile = userProfileRepository.findByUserId(id).orElseThrow(ProfileNotFoundException::new);
+		List<UserItemResponse> userItemResponse = userItemService.getInventory(id);
 
 		UserResponse userResponse = new UserResponse(
 			user.getId(),
@@ -58,17 +72,15 @@ public class UserEntireInfoController {
 			user.getLastLogInAt().toString()
 		);
 
+		ProfileDto profileDto = new ProfileDto(profile.getLevel(), profile.getExp(), profile.getTotalPlaySeconds());
+		WalletDto walletDto = new WalletDto(wallet.getGold(), wallet.getGem());
 
-		// null 표기된 부분은 해당 API 구현 후 구현
-		ProfileDto profile = null;
-		WalletDto wallet = null;
-		List<UserItemResponse> userItemResponse = userItemService.getInventory(id);
-		Long friendCount = null;
+		Long friendCount = (long)friendRepository.findFriendsByUserIdAndStatus(id, FriendStatus.ACCEPTED).size();
 
 		UserEntireInfoResponse response = new UserEntireInfoResponse(
 			userResponse,
-			profile,
-			wallet,
+			profileDto,
+			walletDto,
 			userItemResponse,
 			friendCount
 		);
