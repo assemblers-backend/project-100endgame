@@ -15,11 +15,14 @@ import io.assemblers.project100endgame.friend.exception.FriendRequestNotFoundExc
 import io.assemblers.project100endgame.friend.exception.FriendTargetNotFoundException;
 import io.assemblers.project100endgame.friend.exception.SelfFriendRequestException;
 import io.assemblers.project100endgame.item.exception.ItemNotFoundException;
+import io.assemblers.project100endgame.npc.exception.InvalidPurchaseQuantityException;
 import io.assemblers.project100endgame.npc.exception.NpcNotFoundException;
+import io.assemblers.project100endgame.npc.exception.NpcShopItemNotFoundException;
 import io.assemblers.project100endgame.profile.exception.ProfileNotFoundException;
 import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
 import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuantityException;
 import io.assemblers.project100endgame.useritem.exception.UserItemNotFoundException;
+import io.assemblers.project100endgame.wallet.exception.InsufficientGoldException;
 import io.assemblers.project100endgame.wallet.exception.WalletNotFoundException;
 
 @RestControllerAdvice
@@ -154,6 +157,33 @@ public class GlobalExceptionHandler {
 	) {
 		return ResponseEntity
 			.status(HttpStatus.NOT_FOUND)
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(InsufficientGoldException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleInsufficientGoldException(
+		InsufficientGoldException e
+	) {
+		return ResponseEntity
+			.badRequest()
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(NpcShopItemNotFoundException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleNpcShopItemNotFoundException(
+		NpcShopItemNotFoundException e
+	) {
+		return ResponseEntity
+			.status(HttpStatus.NOT_FOUND)
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(InvalidPurchaseQuantityException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleInvalidPurchaseQuantityException(
+		InvalidPurchaseQuantityException e
+	) {
+		return ResponseEntity
+			.badRequest()
 			.body(GeneralResponse.fail(e.getMessage()));
 	}
 }
