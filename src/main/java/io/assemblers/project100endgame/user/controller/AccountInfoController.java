@@ -52,7 +52,7 @@ public class AccountInfoController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.<UserResponse>builder()
 				.success(true)
-				.msg(null)
+				.message(null)
 				.data(userResponse)
 				.build()
 			);

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final JwtFilter jwtFilter;
+	private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -103,6 +104,10 @@ public class SecurityConfig {
 			)
 
 			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
+			.exceptionHandling(exception -> exception
+				.authenticationEntryPoint(authenticationEntryPoint)
+			)
 
 			.build();
 	}

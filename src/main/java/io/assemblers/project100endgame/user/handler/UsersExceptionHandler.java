@@ -16,7 +16,7 @@ public class UsersExceptionHandler {
 		return ResponseEntity.status(HttpStatus.CONFLICT)
 			.body(GeneralResponse.builder()
 				.success(false)
-				.msg(e.getMessage())
+				.message(e.getMessage())
 				.data(null)
 				.build()
 			);
@@ -27,7 +27,7 @@ public class UsersExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 			.body(GeneralResponse.builder()
 				.success(false)
-				.msg(e.getMessage())
+				.message(e.getMessage())
 				.data(null)
 				.build()
 			);

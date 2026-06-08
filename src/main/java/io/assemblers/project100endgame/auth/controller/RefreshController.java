@@ -17,7 +17,6 @@ import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.auth.service.TokenProvider;
 import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +54,7 @@ public class RefreshController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.<TokenResponse>builder()
 				.success(true)
-				.msg(null)
+				.message(null)
 				.data(tokenResponse)
 				.build()
 			);

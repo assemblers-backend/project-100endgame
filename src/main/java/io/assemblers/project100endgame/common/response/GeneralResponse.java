@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 public class GeneralResponse<T> {
 
 	private boolean success;
-	private String msg;
+	private String message;
 	private T data;
 
 	public static <T> GeneralResponse<T> success(String msg, T data) {
 		return GeneralResponse.<T>builder()
 			.success(true)
-			.msg(msg)
+			.message(msg)
 			.data(data)
 			.build();
 	}
@@ -26,7 +26,7 @@ public class GeneralResponse<T> {
 	public static <T> GeneralResponse<T> success(T data) {
 		return GeneralResponse.<T>builder()
 			.success(true)
-			.msg(null)
+			.message(null)
 			.data(data)
 			.build();
 	}
@@ -34,7 +34,7 @@ public class GeneralResponse<T> {
 	public static GeneralResponse<Void> fail(String msg) {
 		return GeneralResponse.<Void>builder()
 			.success(false)
-			.msg(msg)
+			.message(msg)
 			.data(null)
 			.build();
 	}
