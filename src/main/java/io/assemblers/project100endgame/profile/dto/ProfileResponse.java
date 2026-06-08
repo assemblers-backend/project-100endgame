@@ -4,7 +4,7 @@ import io.assemblers.project100endgame.profile.entity.UserProfile;
 
 public record ProfileResponse(
 	Long profileId,
-	Long level,
+	Integer level,
 	Long exp,
 	Long totalPlaySeconds
 ) {

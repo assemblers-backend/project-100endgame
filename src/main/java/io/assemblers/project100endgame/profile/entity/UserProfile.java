@@ -30,7 +30,7 @@ public class UserProfile extends BaseEntity {
 	Users user;
 
 	@Column(nullable = false)
-	Long level = 1L;
+	Integer level = 1;
 
 	@Column(nullable = false)
 	Long exp = 0L;
