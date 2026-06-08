@@ -121,7 +121,7 @@ INSERT INTO users (id,
                    updated_at)
 VALUES (1,
         'user1@test.com',
-        'password',
+        '$2a$10$tkqXUrJjuViOhfO39gL9Pu2f5WHI9oS0.k4GWJ7gSrTPNcuaSI3GW',
         '유저1',
         'USER',
         'ACTIVE',

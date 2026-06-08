@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.npc.dto.NpcItemPurchaseRequest;
 import io.assemblers.project100endgame.npc.dto.NpcItemPurchaseResponse;
 import io.assemblers.project100endgame.npc.service.NpcPurchaseService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -19,14 +21,16 @@ import lombok.RequiredArgsConstructor;
 public class NpcPurchaseController {
 
 	private final NpcPurchaseService npcPurchaseService;
+	private final TokenService tokenService;
 
 	@PostMapping("/{npcId}/items/{npcItemId}/purchase")
 	public ResponseEntity<GeneralResponse<NpcItemPurchaseResponse>> purchaseItem(
 		@PathVariable Long npcId,
 		@PathVariable Long npcItemId,
-		@RequestBody NpcItemPurchaseRequest request
+		@RequestBody NpcItemPurchaseRequest request,
+		HttpServletRequest servletRequest
 	) {
-		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+		Long userId = tokenService.authValidate(servletRequest);
 
 		return ResponseEntity.ok(
 			GeneralResponse.success(
