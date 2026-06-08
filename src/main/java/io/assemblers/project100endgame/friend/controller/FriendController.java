@@ -3,6 +3,7 @@ package io.assemblers.project100endgame.friend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,7 +71,7 @@ public class FriendController {
 	public ResponseEntity<GeneralResponse<Void>> declineFriendRequest(
 		@PathVariable Long requestId
 	) {
-		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+		Long userId = 2L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
 
 		friendService.declineFriendRequest(userId, requestId);
 
@@ -79,6 +80,19 @@ public class FriendController {
 				"친구 요청을 거절했습니다.",
 				null
 			)
+		);
+	}
+
+	@DeleteMapping("/requests/{requestId}")
+	public ResponseEntity<GeneralResponse<Void>> cancelFriendRequest(
+		@PathVariable Long requestId
+	) {
+		Long userId = 4L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+
+		friendService.cancelFriendRequest(userId, requestId);
+
+		return ResponseEntity.ok(
+			GeneralResponse.success("친구 요청을 취소했습니다.", null)
 		);
 	}
 }
