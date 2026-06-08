@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.wallet.dto.WalletResponse;
 import io.assemblers.project100endgame.wallet.service.WalletService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -16,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 public class WalletController {
 
 	private final WalletService walletService;
+	private final TokenService tokenService;
 
 	@GetMapping
-	public ResponseEntity<GeneralResponse<WalletResponse>> getWallet() {
-		// TODO: 인증 구현 후 로그인 유저 ID로 교체
-		Long userId = 1L;
+	public ResponseEntity<GeneralResponse<WalletResponse>> getWallet(HttpServletRequest requestServlet) {
+		Long userId = tokenService.authValidate(requestServlet);
 
 		return ResponseEntity.ok(
 			GeneralResponse.success("지갑을 조회했습니다.", walletService.getWallet(userId))

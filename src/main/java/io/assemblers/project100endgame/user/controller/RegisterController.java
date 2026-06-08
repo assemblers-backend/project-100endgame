@@ -59,7 +59,7 @@ public class RegisterController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.<UserResponse>builder()
 				.success(true)
-				.msg("가입되었습니다.")
+				.message("가입되었습니다.")
 				.data(userResponse)
 				.build()
 			);

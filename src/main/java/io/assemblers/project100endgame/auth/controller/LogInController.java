@@ -21,7 +21,6 @@ import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.user.entity.Users;
 import io.assemblers.project100endgame.user.repository.UsersRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,7 +63,7 @@ public class LogInController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.<TokenResponse>builder()
 				.success(true)
-				.msg("로그인되었습니다.")
+				.message("로그인되었습니다.")
 				.data(logInResponse)
 				.build()
 		);

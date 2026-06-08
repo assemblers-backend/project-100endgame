@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.profile.dto.ProfileResponse;
 import io.assemblers.project100endgame.profile.service.UserProfileService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -16,10 +18,11 @@ import lombok.RequiredArgsConstructor;
 public class UserProfileController {
 
 	private final UserProfileService userProfileService;
+	private final TokenService tokenService;
 
 	@GetMapping
-	public ResponseEntity<GeneralResponse<ProfileResponse>> getProfile() {
-		Long userId = 1L; // TODO: 인증 구현 후 User.getUserId()로 변경
+	public ResponseEntity<GeneralResponse<ProfileResponse>> getProfile(HttpServletRequest requestServlet) {
+		Long userId = tokenService.authValidate(requestServlet);
 		/*
 		public ResponseEntity<ApiResponse<List<UserItemResponse>>> getInventory(
         @AuthenticationPrincipal CustomUserDetails userDetails

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.assemblers.project100endgame.auth.exception.AuthFailedException;
 import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.auth.service.TokenProvider;
 import io.assemblers.project100endgame.auth.service.TokenService;
@@ -33,7 +32,7 @@ public class LogOutController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.builder()
 				.success(true)
-				.msg("로그아웃되었습니다.")
+				.message("로그아웃되었습니다.")
 				.data(null)
 				.build()
 		);

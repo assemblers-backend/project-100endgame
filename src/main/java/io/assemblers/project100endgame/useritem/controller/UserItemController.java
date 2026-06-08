@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.assemblers.project100endgame.auth.service.TokenService;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.useritem.dto.ItemPickupRequest;
 import io.assemblers.project100endgame.useritem.dto.UserItemResponse;
 import io.assemblers.project100endgame.useritem.service.UserItemService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,10 +26,11 @@ import lombok.RequiredArgsConstructor;
 public class UserItemController {
 
 	private final UserItemService userItemService;
+	private final TokenService tokenService;
 
 	@GetMapping
-	public ResponseEntity<GeneralResponse<List<UserItemResponse>>> getInventory() {
-		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+	public ResponseEntity<GeneralResponse<List<UserItemResponse>>> getInventory(HttpServletRequest requestServlet) {
+		Long userId = tokenService.authValidate(requestServlet);
 
 		return ResponseEntity.ok(
 			GeneralResponse.success("인벤토리를 조회했습니다.", userItemService.getInventory(userId))
@@ -36,9 +39,10 @@ public class UserItemController {
 
 	@PostMapping("/pickup")
 	public ResponseEntity<GeneralResponse<UserItemResponse>> pickupItem(
-		@RequestBody ItemPickupRequest request
+		@RequestBody ItemPickupRequest request,
+		HttpServletRequest requestServlet
 	) {
-		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+		Long userId = tokenService.authValidate(requestServlet);
 
 		return ResponseEntity.ok(
 			GeneralResponse.success("아이템을 획득했습니다.", userItemService.pickupItem(userId, request))
@@ -48,9 +52,10 @@ public class UserItemController {
 	@DeleteMapping("/{itemId}/discard")
 	public ResponseEntity<GeneralResponse<Void>> discardItem(
 		@PathVariable Long itemId,
-		@RequestParam Long quantity
+		@RequestParam Long quantity,
+		HttpServletRequest requestServlet
 	) {
-		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+		Long userId = tokenService.authValidate(requestServlet);
 
 		userItemService.discardItem(userId, itemId, quantity);
 

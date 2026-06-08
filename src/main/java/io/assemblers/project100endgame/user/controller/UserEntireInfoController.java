@@ -1,6 +1,5 @@
 package io.assemblers.project100endgame.user.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +76,7 @@ public class UserEntireInfoController {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(GeneralResponse.<UserEntireInfoResponse>builder()
 				.success(true)
-				.msg("가입되었습니다.")
+				.message("가입되었습니다.")
 				.data(response)
 				.build()
 			);
