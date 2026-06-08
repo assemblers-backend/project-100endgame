@@ -121,7 +121,7 @@ INSERT INTO users (id,
                    updated_at)
 VALUES (1,
         'user1@test.com',
-        'password',
+        '$2a$10$tkqXUrJjuViOhfO39gL9Pu2f5WHI9oS0.k4GWJ7gSrTPNcuaSI3GW',
         '유저1',
         'USER',
         'ACTIVE',
@@ -253,5 +253,39 @@ VALUES (1,
         1,
         0,
         0,
+        NOW(),
+        NOW());
+
+-- NPC
+INSERT INTO npcs (id,
+                  r_id,
+                  name,
+                  description,
+                  location_key,
+                  active,
+                  created_at,
+                  updated_at)
+VALUES (1,
+        'npc_shop_001',
+        '상점 주인',
+        '기본 아이템을 판매하는 NPC입니다.',
+        'village_shop',
+        true,
+        NOW(),
+        NOW());
+
+-- NPC 상점 아이템
+INSERT INTO npc_shop_items (id,
+                            quantity,
+                            sort_order,
+                            npc_id,
+                            item_id,
+                            created_at,
+                            updated_at)
+VALUES (1,
+        100,
+        1,
+        1,
+        1,
         NOW(),
         NOW());
