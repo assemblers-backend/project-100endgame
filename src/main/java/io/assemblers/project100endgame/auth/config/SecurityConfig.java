@@ -36,7 +36,7 @@ public class SecurityConfig {
 
 				// 인증
 				.requestMatchers(HttpMethod.POST, "/api/v1/auth/login")
-				.anonymous()
+				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh")
 				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/api/v1/auth/logout")
@@ -44,7 +44,7 @@ public class SecurityConfig {
 
 				// 유저
 				.requestMatchers(HttpMethod.POST, "/api/v1/users/register")
-				.anonymous()
+				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me")
 				.authenticated()
 				.requestMatchers(HttpMethod.GET, "/api/v1/users/me/data")
