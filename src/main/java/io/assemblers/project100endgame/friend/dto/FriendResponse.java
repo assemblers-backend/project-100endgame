@@ -14,7 +14,7 @@ public record FriendResponse(
 	String nickname
 ) {
 
-	public static FriendResponse from(Friend friend, Long currentUserId) {
+	public static FriendResponse friendOf(Friend friend, Long currentUserId) {
 
 		// 내 ID가 보낸거면 to가 상대방. form이 나. 그게 아니면 to = 받는게 나.
 		Users opponent = friend.getFromUser().getId().equals(currentUserId)
@@ -28,6 +28,19 @@ public record FriendResponse(
 			friend.getFriendStatus().name(),
 			friend.getCreatedAt(),
 			opponent.getNickname()
+		);
+	}
+
+	public static FriendResponse requestFrom(Friend friend) {
+		Users requester = friend.getFromUser();
+
+		return new FriendResponse(
+			friend.getId(),
+			friend.getFromUser().getId(),
+			friend.getToUser().getId(),
+			friend.getFriendStatus().name(),
+			friend.getCreatedAt(),
+			requester.getNickname()
 		);
 	}
 }

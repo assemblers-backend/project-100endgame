@@ -23,4 +23,12 @@ public class FriendService {
 			.map(friend -> FriendResponse.friendOf(friend, userId))
 			.toList();
 	}
+
+	public List<FriendResponse> getReceivedFriendRequests(Long userId) {
+		return friendRepository.findReceivedRequestsByUserIdAndStatus(userId, FriendStatus.PENDING)
+			.stream()
+			.map(FriendResponse::requestFrom)
+			.toList();
+	}
+	
 }

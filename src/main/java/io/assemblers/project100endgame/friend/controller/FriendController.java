@@ -27,4 +27,13 @@ public class FriendController {
 			GeneralResponse.success(null, friendService.getFriends(userId))
 		);
 	}
+
+	@GetMapping("/requests")
+	public ResponseEntity<GeneralResponse<List<FriendResponse>>> getReceivedFriendRequests() {
+		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+
+		return ResponseEntity.ok(
+			GeneralResponse.success(null, friendService.getReceivedFriendRequests(userId))
+		);
+	}
 }

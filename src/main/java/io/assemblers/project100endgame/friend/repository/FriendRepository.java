@@ -27,4 +27,18 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 		@Param("userId") Long userId,
 		@Param("status") FriendStatus status
 	);
+
+	@Query("""
+		select f
+		from Friend f
+		join fetch f.fromUser
+		join fetch f.toUser
+		where f.toUser.id = :userId
+		and f.friendStatus = :status
+		order by f.createdAt desc
+		""")
+	List<Friend> findReceivedRequestsByUserIdAndStatus(
+		@Param("userId") Long userId,
+		@Param("status") FriendStatus status
+	);
 }
