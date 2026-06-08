@@ -10,6 +10,8 @@ import io.assemblers.project100endgame.npc.entity.Npc;
 
 public interface NpcRepository extends JpaRepository<Npc, Long> {
 
+	boolean existsByIdAndActiveTrue(Long npcId);
+
 	@Query("""
 		select distinct n
 		from Npc n
