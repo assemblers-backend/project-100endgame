@@ -10,6 +10,7 @@ import io.assemblers.project100endgame.friend.dto.FriendResponse;
 import io.assemblers.project100endgame.friend.entity.Friend;
 import io.assemblers.project100endgame.friend.entity.FriendStatus;
 import io.assemblers.project100endgame.friend.exception.DuplicateFriendRequestException;
+import io.assemblers.project100endgame.friend.exception.FriendRelationNotFoundException;
 import io.assemblers.project100endgame.friend.exception.FriendRequestAcceptNotAllowedException;
 import io.assemblers.project100endgame.friend.exception.FriendRequestCancelNotAllowedException;
 import io.assemblers.project100endgame.friend.exception.FriendRequestDeclineNotAllowedException;
@@ -124,5 +125,17 @@ public class FriendService {
 		}
 
 		friend.cancel();
+	}
+
+	@Transactional
+	public void deleteFriend(Long userId, Long friendUserId) {
+		usersRepository.findById(friendUserId)
+			.orElseThrow(FriendTargetNotFoundException::new);
+
+		Friend friend = friendRepository
+			.findFriendRelation(userId, friendUserId, FriendStatus.ACCEPTED)
+			.orElseThrow(FriendRelationNotFoundException::new);
+
+		friendRepository.delete(friend);
 	}
 }

@@ -95,4 +95,17 @@ public class FriendController {
 			GeneralResponse.success("친구 요청을 취소했습니다.", null)
 		);
 	}
+
+	@DeleteMapping("/{friendUserId}")
+	public ResponseEntity<GeneralResponse<Void>> deleteFriend(
+		@PathVariable Long friendUserId
+	) {
+		Long userId = 1L; // TODO: 인증 구현 후 로그인 유저 ID로 교체
+
+		friendService.deleteFriend(userId, friendUserId);
+
+		return ResponseEntity.ok(
+			GeneralResponse.success("친구를 삭제했습니다.", null)
+		);
+	}
 }
