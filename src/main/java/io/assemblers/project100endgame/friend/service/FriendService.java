@@ -10,6 +10,8 @@ import io.assemblers.project100endgame.friend.dto.FriendResponse;
 import io.assemblers.project100endgame.friend.entity.Friend;
 import io.assemblers.project100endgame.friend.entity.FriendStatus;
 import io.assemblers.project100endgame.friend.exception.DuplicateFriendRequestException;
+import io.assemblers.project100endgame.friend.exception.FriendRequestAcceptNotAllowedException;
+import io.assemblers.project100endgame.friend.exception.FriendRequestNotFoundException;
 import io.assemblers.project100endgame.friend.exception.FriendTargetNotFoundException;
 import io.assemblers.project100endgame.friend.exception.SelfFriendRequestException;
 import io.assemblers.project100endgame.friend.repository.FriendRepository;
@@ -79,5 +81,20 @@ public class FriendService {
 		if (request == null || request.toUserId() == null) {
 			throw new FriendTargetNotFoundException();
 		}
+	}
+
+	@Transactional
+	public FriendResponse acceptFriendRequest(Long userId, Long requestId) {
+		Friend friend = friendRepository
+			.findByIdAndFriendStatusWithUsers(requestId, FriendStatus.PENDING)
+			.orElseThrow(FriendRequestNotFoundException::new);
+
+		if (!friend.getToUser().getId().equals(userId)) {
+			throw new FriendRequestAcceptNotAllowedException();
+		}
+
+		friend.accept();
+
+		return FriendResponse.requestFrom(friend);
 	}
 }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.friend.exception.DuplicateFriendRequestException;
+import io.assemblers.project100endgame.friend.exception.FriendRequestAcceptNotAllowedException;
+import io.assemblers.project100endgame.friend.exception.FriendRequestNotFoundException;
 import io.assemblers.project100endgame.friend.exception.FriendTargetNotFoundException;
 import io.assemblers.project100endgame.friend.exception.SelfFriendRequestException;
 import io.assemblers.project100endgame.item.exception.ItemNotFoundException;
@@ -104,6 +106,24 @@ public class GlobalExceptionHandler {
 	) {
 		return ResponseEntity
 			.status(HttpStatus.CONFLICT)
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(FriendRequestNotFoundException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleFriendRequestNotFoundException(
+		FriendRequestNotFoundException e
+	) {
+		return ResponseEntity
+			.status(HttpStatus.NOT_FOUND)
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(FriendRequestAcceptNotAllowedException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleFriendRequestAcceptNotAllowedException(
+		FriendRequestAcceptNotAllowedException e
+	) {
+		return ResponseEntity
+			.badRequest()
 			.body(GeneralResponse.fail(e.getMessage()));
 	}
 }

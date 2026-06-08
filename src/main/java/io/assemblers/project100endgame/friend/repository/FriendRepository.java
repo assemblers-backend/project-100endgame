@@ -2,6 +2,7 @@ package io.assemblers.project100endgame.friend.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -57,5 +58,18 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 		@Param("fromUserId") Long fromUserId,
 		@Param("toUserId") Long toUserId,
 		@Param("statuses") Collection<FriendStatus> statuses
+	);
+
+	@Query("""
+    select f
+    from Friend f
+    join fetch f.fromUser
+    join fetch f.toUser
+    where f.id = :requestId
+    and f.friendStatus = :friendStatus
+    """)
+	Optional<Friend> findByIdAndFriendStatusWithUsers(
+		@Param("requestId") Long requestId,
+		@Param("friendStatus") FriendStatus friendStatus
 	);
 }
