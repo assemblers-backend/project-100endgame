@@ -1,5 +1,6 @@
 package io.assemblers.project100endgame.friend.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,5 +41,21 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 	List<Friend> findReceivedRequestsByUserIdAndStatus(
 		@Param("userId") Long userId,
 		@Param("status") FriendStatus status
+	);
+
+	@Query("""
+        select count(f)
+        from Friend f
+        where (
+            (f.fromUser.id = :fromUserId and f.toUser.id = :toUserId)
+            or
+            (f.fromUser.id = :toUserId and f.toUser.id = :fromUserId)
+        )
+        and f.friendStatus in :statuses
+        """)
+	long countExistingRelationOrRequest(
+		@Param("fromUserId") Long fromUserId,
+		@Param("toUserId") Long toUserId,
+		@Param("statuses") Collection<FriendStatus> statuses
 	);
 }
