@@ -1,0 +1,127 @@
+package io.assemblers.project100endgame.useritem.entity;
+
+import java.time.LocalDateTime;
+
+import io.assemblers.project100endgame.common.entity.BaseEntity;
+import io.assemblers.project100endgame.item.entity.Item;
+import io.assemblers.project100endgame.user.entity.Users;
+import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
+import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuantityException;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@Table(name = "user_items",
+	uniqueConstraints = {
+		@UniqueConstraint(
+			name = "uk_user_item_user_item",
+			columnNames = {"user_id", "item_id"}
+		)
+	}
+)
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class UserItem extends BaseEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(nullable = false)
+	private Long quantity;
+
+	@Column(nullable = false)
+	private boolean equipped;
+
+	@Column(nullable = false)
+	private LocalDateTime acquiredAt;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "item_id", nullable = false)
+	private Item item;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	private Users user;
+
+	@Builder
+	public UserItem(
+		Users user,
+		Item item,
+		Long quantity
+	) {
+		validateUser(user);
+		validateItem(item);
+		validateQuantity(quantity);
+
+		this.user = user;
+		this.item = item;
+		this.quantity = quantity;
+		this.equipped = false;
+		this.acquiredAt = LocalDateTime.now();
+
+	}
+
+	public void increaseQuantity(Long quantity) {
+		validateQuantity(quantity);
+
+		this.quantity += quantity;
+	}
+
+	public void decreaseQuantity(Long quantity) {
+		validateQuantity(quantity);
+
+		if (this.quantity < quantity) {
+			throw new NotEnoughItemQuantityException();
+		}
+
+		this.quantity -= quantity;
+
+		if (this.quantity == 0) {
+			this.equipped = false;
+		}
+	}
+
+	// public void equip() {
+	// 	this.equipped = true;
+	// }
+	//
+	// public void unequip() {
+	// 	this.equipped = false;
+	// }
+
+	private static void validateUser(Users user) {
+		if (user == null) {
+			throw new IllegalArgumentException("유저는 필수입니다.");
+		}
+	}
+
+	private static void validateItem(Item item) {
+		if (item == null) {
+			throw new IllegalArgumentException("아이템은 필수입니다.");
+		}
+	}
+
+	private static void validateQuantity(Long quantity) {
+		if (quantity == null || quantity <= 0) {
+			throw new InvalidItemQuantityException();
+		}
+	}
+
+	public boolean isEmpty() {
+		return this.quantity == 0;
+	}
+}
