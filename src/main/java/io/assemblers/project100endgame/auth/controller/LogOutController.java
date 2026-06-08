@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.assemblers.project100endgame.auth.dto.TokenPair;
-import io.assemblers.project100endgame.auth.exception.LogOutFailedException;
+import io.assemblers.project100endgame.auth.exception.AuthFailedException;
 import io.assemblers.project100endgame.auth.repository.TokenRepository;
 import io.assemblers.project100endgame.auth.service.TokenProvider;
 import io.assemblers.project100endgame.auth.service.TokenService;
@@ -27,17 +26,7 @@ public class LogOutController {
 
 	@PostMapping
 	public ResponseEntity<GeneralResponse<Object>> logOut(HttpServletRequest request) {
-		String token = tokenService.resolveToken(request);
-
-		if (token == null) {
-			throw new LogOutFailedException("인증이 필요합니다.");
-		}
-
-		if (!tokenProvider.validate(token)) {
-			throw new LogOutFailedException("유효하지 않은 토큰입니다.");
-		}
-
-		Long id = Long.valueOf(tokenProvider.parseClaims(token).getSubject());
+		Long id = tokenService.authValidate(request);
 
 		tokenService.logOut(id);
 

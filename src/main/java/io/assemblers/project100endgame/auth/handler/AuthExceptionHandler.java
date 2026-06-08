@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.assemblers.project100endgame.auth.exception.InvalidRefreshTokenException;
 import io.assemblers.project100endgame.auth.exception.LogInFailedException;
-import io.assemblers.project100endgame.auth.exception.LogOutFailedException;
+import io.assemblers.project100endgame.auth.exception.AuthFailedException;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 
 @RestControllerAdvice
@@ -34,8 +34,8 @@ public class AuthExceptionHandler {
 			);
 	}
 
-	@ExceptionHandler(LogOutFailedException.class)
-	public ResponseEntity<GeneralResponse<Object>> handleLogOutFailedException(LogOutFailedException e) {
+	@ExceptionHandler(AuthFailedException.class)
+	public ResponseEntity<GeneralResponse<Object>> handleLogOutFailedException(AuthFailedException e) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			.body(GeneralResponse.builder()
 				.success(false)

@@ -1,5 +1,7 @@
 package io.assemblers.project100endgame.auth.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,6 +48,8 @@ public class LogInController {
 		if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
 			throw new LogInFailedException("이메일 또는 비밀번호가 올바르지 않습니다.");
 		}
+
+		user.setLastLogInAt(LocalDateTime.now());
 
 		TokenPair NewTokenPair = tokenProvider.issueTokenPair(user.getId());
 
