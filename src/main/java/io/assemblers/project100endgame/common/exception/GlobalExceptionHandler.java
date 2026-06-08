@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.item.exception.ItemNotFoundException;
 import io.assemblers.project100endgame.npc.exception.NpcNotFoundException;
+import io.assemblers.project100endgame.profile.exception.ProfileNotFoundException;
 import io.assemblers.project100endgame.useritem.exception.InvalidItemQuantityException;
 import io.assemblers.project100endgame.useritem.exception.NotEnoughItemQuantityException;
 import io.assemblers.project100endgame.useritem.exception.UserItemNotFoundException;
@@ -64,6 +65,13 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(WalletNotFoundException.class)
 	public ResponseEntity<GeneralResponse<Void>> handleWalletNotFoundException(WalletNotFoundException e) {
+		return ResponseEntity
+			.status(HttpStatus.NOT_FOUND)
+			.body(GeneralResponse.fail(e.getMessage()));
+	}
+
+	@ExceptionHandler(ProfileNotFoundException.class)
+	public ResponseEntity<GeneralResponse<Void>> handleProfileNotFoundException(ProfileNotFoundException e) {
 		return ResponseEntity
 			.status(HttpStatus.NOT_FOUND)
 			.body(GeneralResponse.fail(e.getMessage()));

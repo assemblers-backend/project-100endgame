@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final JwtFilter jwtFilter;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 		return http

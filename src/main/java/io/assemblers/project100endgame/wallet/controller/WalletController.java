@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.assemblers.project100endgame.common.dto.GeneralResponse;
+import io.assemblers.project100endgame.common.response.GeneralResponse;
 import io.assemblers.project100endgame.wallet.dto.WalletResponse;
 import io.assemblers.project100endgame.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
