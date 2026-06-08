@@ -57,7 +57,7 @@ public class TokenService {
 			throw new UserNotFoundException(id);
 		}
 
-		tokenRepository.deleteById(id);
+		tokenRepository.deleteByUserId(id);
 		addTokenBlacklist(token.getToken());
 	}
 
@@ -82,10 +82,11 @@ public class TokenService {
 		}
 
 		Long id = Long.valueOf(tokenProvider.parseClaims(token).getSubject());
+		Boolean isAccess = claims.get("isAccess", Boolean.class);
 
 		RefreshToken refreshToken = tokenRepository.findByUserId(id);
 
-		if (refreshToken == null || isTokenBan(refreshToken.getToken())) {
+		if (refreshToken == null || !isAccess || isTokenBan(refreshToken.getToken())) {
 			throw new AuthFailedException("유효하지 않은 토큰입니다.");
 		}
 
