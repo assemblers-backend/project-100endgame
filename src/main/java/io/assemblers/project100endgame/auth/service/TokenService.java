@@ -82,7 +82,7 @@ public class TokenService {
 		}
 
 		Long id = Long.valueOf(tokenProvider.parseClaims(token).getSubject());
-		Boolean isAccess = claims.get("isAccess", Boolean.class);
+		Boolean isAccess = tokenProvider.parseClaims(token).get("isAccess", Boolean.class);
 
 		RefreshToken refreshToken = tokenRepository.findByUserId(id);
 
